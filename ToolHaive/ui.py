@@ -1,0 +1,818 @@
+"""
+utils/ui.py
+───────────────────────────────────────────────────────────────────────────────
+ToolHive AI — Shared UI / Frontend Layer
+All CSS, HTML, and styling lives here so every page just calls inject_styles()
+and render_navbar(). This file is the single source of truth for the brand.
+───────────────────────────────────────────────────────────────────────────────
+"""
+
+import streamlit as st
+
+# ── Brand tokens (mirrors toolhive_brand_guide.html) ─────────────────────────
+BRAND = dict(
+    navy        = "#003973",
+    navy_mid    = "#0056A3",
+    sky         = "#7AB1E3",
+    cream       = "#E5E5BE",
+    cream_light = "#F5F5E8",
+    ink         = "#0A1628",
+    ink_mid     = "#2A3A5C",
+    ink_muted   = "#6B7A96",
+    white       = "#FFFFFF",
+)
+
+# ── Hex-grid SVG (used as repeating bg at low opacity) ───────────────────────
+HEX_PATTERN_LG = (
+    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' "
+    "width='90' height='104' viewBox='0 0 90 104'%3E"
+    "%3Cpolygon points='45,4 86,25 86,69 45,90 4,69 4,25' "
+    "fill='none' stroke='%23E5E5BE' stroke-width='1'/%3E%3C/svg%3E\")"
+)
+HEX_PATTERN_SM = (
+    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' "
+    "width='70' height='80' viewBox='0 0 70 80'%3E"
+    "%3Cpolygon points='35,3 67,19 67,52 35,68 3,52 3,19' "
+    "fill='none' stroke='%23E5E5BE' stroke-width='1'/%3E%3C/svg%3E\")"
+)
+HEX_PATTERN_CARD = (
+    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' "
+    "width='44' height='50' viewBox='0 0 44 50'%3E"
+    "%3Cpolygon points='22,2 42,12 42,32 22,42 2,32 2,12' "
+    "fill='none' stroke='white' stroke-width='1.2'/%3E%3C/svg%3E\")"
+)
+
+# ── Google Fonts import ───────────────────────────────────────────────────────
+FONTS_HTML = """
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+"""
+
+# ── Full CSS ──────────────────────────────────────────────────────────────────
+BASE_CSS = """
+<style>
+/* ── Reset & Root ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  --navy:        #003973;
+  --navy-mid:    #0056A3;
+  --sky:         #7AB1E3;
+  --cream:       #E5E5BE;
+  --cream-light: #F5F5E8;
+  --cream-dark:  #C8C89A;
+  --ink:         #0A1628;
+  --ink-mid:     #2A3A5C;
+  --ink-muted:   #6B7A96;
+  --white:       #FFFFFF;
+  --grad:        linear-gradient(90deg,#003973 0%,#0056A3 40%,#7AB1E3 75%,#E5E5BE 100%);
+  --grad-135:    linear-gradient(135deg,#003973 0%,#0056A3 40%,#7AB1E3 75%,#E5E5BE 100%);
+  --font-display:'Syne', sans-serif;
+  --font-body:   'DM Sans', sans-serif;
+  --font-mono:   'DM Mono', monospace;
+}
+
+/* ── Hide Streamlit chrome ────────────────────────────────────── */
+[data-testid="stSidebar"]       { display: none !important; }
+[data-testid="collapsedControl"]{ display: none !important; }
+#MainMenu                        { visibility: hidden !important; }
+footer                           { visibility: hidden !important; }
+header                           { visibility: hidden !important; }
+[data-testid="stToolbar"]        { display: none !important; }
+[data-testid="stDecoration"]     { display: none !important; }
+
+/* Remove Streamlit default padding */
+.block-container {
+  padding: 0 !important;
+  max-width: 100% !important;
+}
+.stApp {
+  font-family: var(--font-body) !important;
+}
+
+/* ── Navbar ───────────────────────────────────────────────────── */
+.th-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 9999;
+  background: rgba(10,22,40,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(122,177,227,0.1);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 48px;
+  gap: 0;
+}
+.th-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  margin-right: auto;
+  cursor: pointer;
+}
+.th-nav-hex {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg,#003973,#0056A3,#7AB1E3);
+  clip-path: polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.th-nav-hex svg { width: 16px; height: 16px; fill: white; }
+.th-nav-wordmark {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 800;
+  letter-spacing: -0.02em;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.th-nav-links {
+  display: flex; align-items: center;
+  gap: 4px; margin-right: 24px;
+}
+.th-nav-link {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(229,229,190,0.5);
+  padding: 8px 16px; border-radius: 8px;
+  text-decoration: none;
+  border: none; background: transparent;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+.th-nav-link:hover {
+  color: rgba(229,229,190,0.9);
+  background: rgba(255,255,255,0.05);
+}
+.th-nav-link.active { color: #E5E5BE; }
+.th-nav-cta {
+  font-family: var(--font-body);
+  font-size: 13px; font-weight: 500;
+  background: var(--grad); color: white;
+  padding: 9px 22px; border-radius: 9px;
+  border: none; cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+.th-nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ── Page wrapper (offset for fixed nav) ─────────────────────── */
+.th-page { padding-top: 64px; min-height: 100vh; }
+
+/* ── LANDING: Hero ────────────────────────────────────────────── */
+.th-hero {
+  min-height: calc(100vh - 64px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 80px 48px 60px;
+  position: relative; overflow: hidden;
+  background: #0A1628;
+}
+.th-hero-hex-bg {
+  position: absolute; inset: 0;
+  opacity: 0.035;
+  background-image: HEX_PATTERN_LG_PLACEHOLDER;
+  background-size: 90px 104px;
+  pointer-events: none;
+}
+.th-hero-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 900px 600px at 15% 60%, rgba(0,56,115,0.55) 0%, transparent 70%),
+    radial-gradient(ellipse 600px 500px at 85% 25%, rgba(122,177,227,0.16) 0%, transparent 65%),
+    radial-gradient(ellipse 400px 400px at 55% 85%, rgba(229,229,190,0.06) 0%, transparent 60%);
+}
+.th-hero-content {
+  position: relative; z-index: 2;
+  max-width: 860px; width: 100%;
+}
+.th-hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--sky);
+  margin-bottom: 28px; opacity: 0.8;
+}
+.th-hero-logo-row {
+  display: flex; align-items: center;
+  justify-content: center; gap: 18px;
+  margin-bottom: 20px;
+}
+.th-hero-hex {
+  width: 60px; height: 60px; flex-shrink: 0;
+  background: linear-gradient(135deg,#003973,#0056A3,#7AB1E3);
+  clip-path: polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);
+  display: flex; align-items: center; justify-content: center;
+}
+.th-hero-hex svg { width: 28px; height: 28px; fill: white; }
+.th-hero-wordmark {
+  font-family: var(--font-display);
+  font-size: clamp(48px,8vw,80px); font-weight: 800;
+  letter-spacing: -0.03em; line-height: 1;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.th-hero-tagline {
+  font-family: var(--font-body);
+  font-size: clamp(15px,2vw,19px); font-weight: 300;
+  color: rgba(229,229,190,0.6); letter-spacing: 0.02em;
+  margin-bottom: 40px; line-height: 1.6;
+}
+.th-hero-tagline strong {
+  color: rgba(229,229,190,0.9); font-weight: 400;
+}
+.th-hero-cta-row {
+  display: flex; gap: 14px;
+  justify-content: center;
+  margin-bottom: 56px; flex-wrap: wrap;
+}
+.th-btn-hero {
+  font-family: var(--font-body);
+  font-size: 15px; font-weight: 500;
+  background: var(--grad); color: white;
+  padding: 14px 36px; border-radius: 11px;
+  border: none; cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.th-btn-hero:hover { opacity: 0.9; transform: translateY(-2px); }
+.th-btn-ghost {
+  font-family: var(--font-body);
+  font-size: 15px; font-weight: 400;
+  background: transparent; color: rgba(229,229,190,0.7);
+  padding: 13px 28px; border-radius: 11px;
+  border: 1px solid rgba(229,229,190,0.2);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.th-btn-ghost:hover {
+  border-color: rgba(229,229,190,0.5);
+  color: rgba(229,229,190,0.95);
+}
+.th-hero-chips {
+  display: flex; gap: 10px;
+  justify-content: center; flex-wrap: wrap;
+}
+.th-chip {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(122,177,227,0.2);
+  border-radius: 8px; padding: 7px 16px;
+  display: inline-flex; align-items: center; gap: 8px;
+  transition: border-color 0.2s;
+}
+.th-chip:hover { border-color: rgba(122,177,227,0.45); }
+.th-chip svg {
+  width: 14px; height: 14px;
+  stroke: var(--sky); fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  flex-shrink: 0;
+}
+.th-chip span {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(229,229,190,0.55);
+}
+
+/* ── LANDING: Preview strip ───────────────────────────────────── */
+.th-preview {
+  padding: 60px 48px 80px;
+  background: linear-gradient(180deg,#0A1628 0%,#0d1e35 100%);
+}
+.th-preview-label {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(122,177,227,0.5);
+  margin-bottom: 32px;
+}
+.th-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 16px; max-width: 1300px; margin: 0 auto;
+}
+.th-preview-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(122,177,227,0.12);
+  border-radius: 16px; padding: 22px 20px;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.th-preview-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(122,177,227,0.3);
+  transform: translateY(-3px);
+}
+.th-preview-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.th-preview-icon svg {
+  width: 20px; height: 20px;
+  fill: none; stroke: white;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+.th-preview-name {
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 700;
+  color: rgba(255,255,255,0.85);
+}
+.th-preview-desc {
+  font-size: 11px; color: rgba(255,255,255,0.35);
+  line-height: 1.5;
+}
+
+/* ── LANDING: Stats row ───────────────────────────────────────── */
+.th-stats-row {
+  display: flex; justify-content: center;
+  gap: 64px; flex-wrap: wrap;
+  padding: 40px 48px;
+  border-top: 1px solid rgba(122,177,227,0.08);
+  max-width: 1300px; margin: 0 auto;
+}
+.th-stat-num {
+  font-family: var(--font-display);
+  font-size: 36px; font-weight: 800;
+  letter-spacing: -0.02em;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+.th-stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(229,229,190,0.35);
+  margin-top: 4px; text-align: center;
+}
+
+/* ── DASHBOARD: Hero band ─────────────────────────────────────── */
+.th-dash-hero {
+  background: var(--ink);
+  padding: 40px 48px 36px;
+  position: relative; overflow: hidden;
+}
+.th-dash-hex-bg {
+  position: absolute; inset: 0; opacity: 0.03;
+  background-image: HEX_PATTERN_SM_PLACEHOLDER;
+  background-size: 70px 80px;
+  pointer-events: none;
+}
+.th-dash-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 700px 300px at 0% 50%,rgba(0,56,115,0.5) 0%,transparent 70%);
+}
+.th-dash-inner {
+  position: relative; z-index: 1;
+  max-width: 1300px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 24px; flex-wrap: wrap;
+}
+.th-dash-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--sky);
+  opacity: 0.7; margin-bottom: 8px;
+}
+.th-dash-title {
+  font-family: var(--font-display);
+  font-size: clamp(24px,3vw,36px); font-weight: 800;
+  letter-spacing: -0.02em;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.th-dash-sub {
+  font-size: 14px; color: rgba(229,229,190,0.45);
+  margin-top: 6px;
+}
+.th-dash-add-btn {
+  font-family: var(--font-body);
+  font-size: 13px; font-weight: 500;
+  background: var(--grad); color: white;
+  padding: 11px 24px; border-radius: 10px;
+  border: none; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.th-dash-add-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.th-dash-add-btn svg {
+  width: 16px; height: 16px; fill: none;
+  stroke: white; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ── DASHBOARD: Toolbar ───────────────────────────────────────── */
+.th-toolbar {
+  background: white;
+  border-bottom: 1px solid rgba(0,56,115,0.08);
+  padding: 16px 48px;
+  position: sticky; top: 64px; z-index: 100;
+}
+.th-toolbar-inner {
+  max-width: 1300px; margin: 0 auto; width: 100%;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.th-search-wrap {
+  position: relative; flex: 1;
+  min-width: 200px; max-width: 360px;
+}
+.th-search-wrap svg {
+  position: absolute; left: 12px; top: 50%;
+  transform: translateY(-50%);
+  width: 15px; height: 15px;
+  stroke: var(--ink-muted); fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+.th-search-input {
+  width: 100%;
+  border: 1.5px solid rgba(0,56,115,0.15);
+  border-radius: 9px;
+  padding: 9px 14px 9px 36px;
+  font-size: 13px; font-family: var(--font-body);
+  color: var(--ink); background: white; outline: none;
+  transition: border-color 0.2s;
+}
+.th-search-input:focus { border-color: var(--navy-mid); }
+.th-search-input::placeholder { color: var(--ink-muted); }
+.th-tag-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+.th-tag-btn {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 7px 14px;
+  border-radius: 7px; border: 1px solid rgba(0,56,115,0.15);
+  background: transparent; color: var(--ink-muted);
+  cursor: pointer; transition: all 0.15s;
+}
+.th-tag-btn:hover { border-color: var(--navy-mid); color: var(--navy-mid); }
+.th-tag-btn.active { background: var(--navy); color: var(--cream); border-color: var(--navy); }
+.th-result-count {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+/* ── DASHBOARD: Cards grid ────────────────────────────────────── */
+.th-cards-section { padding: 32px 48px 64px; background: var(--cream-light); }
+.th-cards-inner { max-width: 1300px; margin: 0 auto; }
+.th-section-divider {
+  display: flex; align-items: center;
+  gap: 12px; margin-bottom: 20px;
+}
+.th-divider-line { flex: 1; height: 1px; background: rgba(0,56,115,0.1); }
+.th-divider-label {
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--ink-muted);
+}
+.th-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 18px;
+}
+@media (max-width: 1200px) { .th-cards-grid { grid-template-columns: repeat(3,1fr); } }
+@media (max-width: 900px)  { .th-cards-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 580px)  { .th-cards-grid { grid-template-columns: 1fr; } }
+
+/* ── Tool card ────────────────────────────────────────────────── */
+.th-tool-card {
+  background: white;
+  border: 1px solid rgba(0,56,115,0.1);
+  border-radius: 20px; overflow: hidden;
+  display: flex; flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+}
+.th-tool-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 56px rgba(0,56,115,0.14);
+  border-color: rgba(0,86,163,0.2);
+}
+.th-card-cover {
+  height: 120px; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.th-card-cover-hex {
+  position: absolute; inset: 0; opacity: 0.07;
+  background-image: HEX_PATTERN_CARD_PLACEHOLDER;
+  background-size: 44px 50px;
+}
+.th-card-cover-shade {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.32) 100%);
+}
+.th-card-cover-icon {
+  position: relative; z-index: 1;
+  width: 52px; height: 52px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.th-card-cover-icon svg {
+  width: 26px; height: 26px; fill: none;
+  stroke: white; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+/* Cover gradients */
+.cv-1 { background: linear-gradient(135deg,#002a58 0%,#003973 45%,#0056A3 100%); }
+.cv-2 { background: linear-gradient(135deg,#003d1f 0%,#00552d 45%,#1a7a4a 100%); }
+.cv-3 { background: linear-gradient(135deg,#1a2a52 0%,#1e3a7a 45%,#2952a3 100%); }
+.cv-4 { background: linear-gradient(135deg,#003d4a 0%,#005566 45%,#007a8a 100%); }
+.cv-5 { background: linear-gradient(135deg,#2a1a52 0%,#3d2278 45%,#5a35a8 100%); }
+.cv-6 { background: linear-gradient(135deg,#003355 0%,#004d80 45%,#1a6e99 100%); }
+.cv-7 { background: linear-gradient(135deg,#3d2200 0%,#5a3300 45%,#8a5200 100%); }
+.cv-8 { background: linear-gradient(135deg,#002840 0%,#003d5c 45%,#005580 100%); }
+
+/* Card body */
+.th-card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+.th-card-top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.th-card-cat-tag {
+  font-family: var(--font-mono);
+  font-size: 8.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--navy-mid);
+  background: rgba(0,86,163,0.08);
+  padding: 3px 10px; border-radius: 100px; white-space: nowrap;
+}
+.th-card-turn-badge {
+  font-family: var(--font-mono);
+  font-size: 8px; letter-spacing: 0.06em;
+  padding: 3px 9px; border-radius: 100px; white-space: nowrap;
+}
+.badge-multi   { background: rgba(122,177,227,0.15); color: #1a5d82; }
+.badge-single  { background: rgba(200,200,154,0.35); color: #5a5a28; }
+.th-card-name {
+  font-family: var(--font-display);
+  font-size: 15px; font-weight: 700;
+  color: var(--ink); letter-spacing: -0.01em; line-height: 1.2;
+}
+.th-card-user  { font-size: 11px; color: var(--sky); font-weight: 400; margin-top: -4px; }
+.th-card-desc  { font-size: 11.5px; color: var(--ink-muted); line-height: 1.6; flex: 1; }
+.th-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 12px; margin-top: 6px;
+  border-top: 1px solid rgba(0,56,115,0.07);
+}
+.th-card-launch {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--navy-mid); background: rgba(0,86,163,0.07);
+  border: none; padding: 7px 16px; border-radius: 7px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+.th-card-launch:hover { background: var(--navy); color: white; }
+.th-card-launch svg {
+  width: 11px; height: 11px; fill: none;
+  stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* Add-new card */
+.th-card-add {
+  background: transparent;
+  border: 2px dashed rgba(0,86,163,0.2);
+  border-radius: 20px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 14px; padding: 40px 24px;
+  cursor: pointer; text-align: center;
+  min-height: 280px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.th-card-add:hover {
+  border-color: rgba(0,86,163,0.45);
+  background: rgba(0,86,163,0.03);
+}
+.th-card-add-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  border: 2px dashed rgba(0,86,163,0.25);
+  display: flex; align-items: center; justify-content: center;
+}
+.th-card-add-icon svg {
+  width: 24px; height: 24px; fill: none;
+  stroke: var(--navy-mid); stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round; opacity: 0.6;
+}
+.th-card-add-label {
+  font-family: var(--font-display);
+  font-size: 14px; font-weight: 700;
+  color: var(--navy-mid); opacity: 0.7;
+}
+.th-card-add-sub {
+  font-size: 11px; color: var(--ink-muted);
+  line-height: 1.5; opacity: 0.7;
+}
+
+/* ── Tool page shared ─────────────────────────────────────────── */
+.th-tool-header {
+  background: var(--ink);
+  padding: 32px 48px 28px;
+  position: relative; overflow: hidden;
+}
+.th-tool-header-hex {
+  position: absolute; inset: 0; opacity: 0.03;
+  background-image: HEX_PATTERN_SM_PLACEHOLDER;
+  background-size: 70px 80px; pointer-events: none;
+}
+.th-tool-header-inner {
+  position: relative; z-index: 1;
+  max-width: 900px; margin: 0 auto;
+}
+.th-tool-back {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(229,229,190,0.4); background: none; border: none;
+  cursor: pointer; padding: 0; margin-bottom: 16px;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: color 0.2s;
+}
+.th-tool-back:hover { color: rgba(229,229,190,0.8); }
+.th-tool-page-title {
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 800; letter-spacing: -0.02em;
+  background: var(--grad);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.th-tool-page-sub {
+  font-size: 13px; color: rgba(229,229,190,0.4); margin-top: 4px;
+}
+.th-tool-body {
+  max-width: 900px; margin: 0 auto;
+  padding: 32px 48px 64px;
+  background: var(--cream-light);
+  min-height: calc(100vh - 200px);
+}
+
+/* Streamlit widget overrides inside tool body */
+.th-tool-body .stTextArea textarea {
+  border: 1.5px solid rgba(0,56,115,0.15) !important;
+  border-radius: 10px !important;
+  font-family: var(--font-body) !important;
+  font-size: 14px !important; color: var(--ink) !important;
+  background: white !important;
+}
+.th-tool-body .stTextArea textarea:focus {
+  border-color: var(--navy-mid) !important;
+  box-shadow: 0 0 0 3px rgba(0,86,163,0.08) !important;
+}
+.th-tool-body .stButton button {
+  background: linear-gradient(90deg,#003973,#0056A3) !important;
+  color: white !important; border: none !important;
+  border-radius: 9px !important;
+  font-family: var(--font-body) !important;
+  font-size: 14px !important; font-weight: 500 !important;
+  padding: 10px 28px !important;
+}
+.th-tool-body .stButton button:hover { opacity: 0.88 !important; }
+
+/* Output box */
+.th-output-box {
+  background: white;
+  border: 1px solid rgba(0,56,115,0.1);
+  border-radius: 14px; padding: 24px 28px;
+  margin-top: 20px;
+}
+.th-output-label {
+  font-family: var(--font-mono);
+  font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--ink-muted);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.th-output-label::after {
+  content: ''; flex: 1; height: 1px;
+  background: rgba(0,56,115,0.07);
+}
+</style>
+"""
+
+# Inject the actual hex pattern strings
+BASE_CSS = (
+    BASE_CSS
+    .replace("HEX_PATTERN_LG_PLACEHOLDER",   HEX_PATTERN_LG)
+    .replace("HEX_PATTERN_SM_PLACEHOLDER",   HEX_PATTERN_SM)
+    .replace("HEX_PATTERN_CARD_PLACEHOLDER", HEX_PATTERN_CARD)
+)
+
+# ── JS for search/filter ──────────────────────────────────────────────────────
+FILTER_JS = """
+<script>
+(function(){
+  let activeTag = 'all';
+
+  window.thFilterTag = function(tag) {
+    activeTag = tag;
+    document.querySelectorAll('.th-tag-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.tag === tag);
+    });
+    applyFilters();
+  };
+
+  window.thSearch = function(q) { applyFilters(q); };
+
+  function applyFilters(q) {
+    q = (q || document.querySelector('.th-search-input')?.value || '').toLowerCase().trim();
+    let count = 0;
+    document.querySelectorAll('.th-tool-card').forEach(card => {
+      const matchTag = activeTag === 'all' || card.dataset.cat === activeTag;
+      const matchQ   = !q || card.dataset.name.includes(q) || card.dataset.cat.includes(q);
+      const show     = matchTag && matchQ;
+      card.style.display = show ? '' : 'none';
+      if (show) count++;
+    });
+    const rc = document.getElementById('th-result-count');
+    if (rc) rc.textContent = count + ' tool' + (count === 1 ? '' : 's');
+    const addCard = document.getElementById('th-card-add');
+    if (addCard) addCard.style.display = (activeTag === 'all' && !q) ? '' : 'none';
+  }
+})();
+</script>
+"""
+
+# ── Public API ────────────────────────────────────────────────────────────────
+
+def inject_styles():
+    """Inject fonts, base CSS, and hide all Streamlit chrome.
+    Call this at the very top of every page, before any st.* calls."""
+    st.markdown(FONTS_HTML, unsafe_allow_html=True)
+    st.markdown(BASE_CSS,   unsafe_allow_html=True)
+
+
+def render_navbar(active: str = "home"):
+    """Render the fixed top navbar.
+    active: 'home' | 'dashboard'
+    Note: navigation is handled by Streamlit page routing via st.switch_page().
+    """
+    home_active = 'active' if active == 'home' else ''
+    dash_active = 'active' if active == 'dashboard' else ''
+
+    # Navbar buttons use st query-param trick via onclick form submit is not
+    # possible in pure HTML inside Streamlit — we use anchor hrefs to page files.
+    st.markdown(f"""
+    <nav class="th-nav">
+      <div class="th-nav-logo" onclick="window.location.href='/'">
+        <div class="th-nav-hex">
+          <svg viewBox="0 0 24 24"><path d="M12 2L20 7V17L12 22L4 17V7L12 2Z"/></svg>
+        </div>
+        <span class="th-nav-wordmark">ToolHive AI</span>
+      </div>
+      <div class="th-nav-links">
+        <a class="th-nav-link {home_active}" href="/">Home</a>
+        <a class="th-nav-link {dash_active}" href="/Tools_Library">Tools Library</a>
+        <a class="th-nav-link" href="/">About</a>
+      </div>
+      <a class="th-nav-cta" href="/Tools_Library">Launch a Tool →</a>
+    </nav>
+    """, unsafe_allow_html=True)
+
+
+def render_tool_header(title: str, subtitle: str, cover_class: str = "cv-1"):
+    """Header band for individual tool pages."""
+    st.markdown(f"""
+    <div class="th-tool-header">
+      <div class="th-tool-header-hex"></div>
+      <div class="th-tool-header-inner">
+        <button class="th-tool-back" onclick="window.location.href='/Tools_Library'">
+          ← Back to Library
+        </button>
+        <div class="th-tool-page-title">{title}</div>
+        <div class="th-tool-page-sub">{subtitle}</div>
+      </div>
+    </div>
+    <div class="th-tool-body">
+    """, unsafe_allow_html=True)
+
+
+def close_tool_body():
+    """Close the .th-tool-body wrapper."""
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def render_output_box(content: str):
+    """Render AI output inside a styled box."""
+    st.markdown(f"""
+    <div class="th-output-box">
+      <div class="th-output-label">AI Output</div>
+      <div style="font-family:var(--font-body);font-size:14px;color:var(--ink);line-height:1.7;">
+        {content.replace(chr(10), "<br>")}
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
