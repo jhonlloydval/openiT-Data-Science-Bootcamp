@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>W3D4 Lesson</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.65; margin: 0; padding: 0; background: #eef2f6; color: #111; }
+    .page { max-width: 960px; margin: 40px auto; padding: 36px; background: #ffffff; border-radius: 18px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+    h1, h2, h3 { color: #0f3b6d; margin-bottom: 12px; }
+    h1 { margin-top: 0; font-size: 2.4rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.3rem; }
+    p { margin: 18px 0; font-size: 1rem; color: #1f2937; }
+    ul, ol { margin: 12px 0 20px 28px; color: #1f2937; }
+    li { margin: 8px 0; }
+    code { background: #f2f5fb; color: #0f2c55; padding: 3px 6px; border-radius: 5px; font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 0.95em; }
+    pre { background: #f8fafc; color: #0f172a; padding: 20px; overflow-x: auto; border-radius: 16px; border: 1px solid #d2d8e0; font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 0.95rem; line-height: 1.7; }
+    pre code { background: transparent; color: inherit; padding: 0; border-radius: 0; }
+    pre::selection, pre code::selection { background: #b8d4ff; color: #0f172a; }
+    .box { background: #ffffff; border: 1px solid #d4dae3; border-radius: 14px; padding: 22px; margin: 24px 0; }
+    .tip { background: #eef4ff; border-color: #bed0ff; }
+    .warning { background: #fff8ec; border-color: #ffd8a8; }
+    blockquote { margin: 16px 0; padding: 16px 24px; background: #f5f8fc; border-left: 5px solid #7b9cff; color: #17233d; }
+    a { color: #0e4a8b; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>W3D4 Lesson</h1>
+    <p>Welcome to the W3D4 lesson. This page explains the whole folder in a simple and beginner-friendly way. If you are new to transformers, Streamlit, and agent-style tool calls, this lesson walks you through the ideas step by step.</p>
+
+    <h2>What is W3D4?</h2>
+    <p>W3D4 is a small Streamlit app that teaches you how to build a chat interface and how to connect it to a local model service (like Ollama). The app shows different examples of:</p>
+    <ul>
+      <li>basic chat requests</li>
+      <li>chat user interfaces</li>
+      <li>conversation history</li>
+      <li>streaming responses</li>
+      <li>tool calling / function calls</li>
+    </ul>
+
+    <div class="box tip">
+      <strong>Big idea:</strong> W3D4 is not only about the model answer. It's also about how the app sends requests, how it keeps chat history, and how it lets the model use extra tools.
+    </div>
+
+    <h2>How the app works</h2>
+    <p>The main file is <code>app.py</code>. It is the starting page for the Streamlit app. The extra examples are in <code>W3D4/pages/</code>. Each file is its own page in Streamlit.</p>
+    <p>Every example uses a similar pattern:</p>
+    <ul>
+      <li>create a <code>prompt</code> input area</li>
+      <li>build a JSON payload for the model</li>
+      <li>send the payload to the local server</li>
+      <li>show the response on the page</li>
+    </ul>
+
+    <h2>Run this app</h2>
+    <ol>
+      <li>Install the needed packages: <code>pip install streamlit requests</code></li>
+      <li>Start the local model service (Ollama) so it listens at <code>http://localhost:11434</code></li>
+      <li>Run: <code>streamlit run app.py</code></li>
+    </ol>
+    <div class="box warning">
+      <strong>Note:</strong> The example code expects the model server at <code>localhost:11434</code>. If that server is not running, the pages will not return answers.
+    </div>
+
+    <h2>Page summary</h2>
+    <h3>1. Basic</h3>
+    <p>This page shows the first, simplest chat example.</p>
+    <pre><code>payload = {
+  "model": "llama3.2",
+  "messages": messages,
+  "stream": False
+}
+response = requests.post("http://localhost:11434/api/chat", json=payload)
+reply = response.json()
+st.write(reply)
+</code></pre>
+    <p>It sends a request and prints the full JSON response. The activity asks you to find the assistant text inside that response.</p>
+
+    <h3>2. UI</h3>
+    <p>This page uses Streamlit chat UI components to show how a chat interface can look.</p>
+    <pre><code>with st.chat_message("system"): st.markdown("You are a helpful assistant.")
+with st.chat_message("user"): st.markdown("This is a user message.")
+with st.chat_message("assistant"): st.markdown("This is an assistant message.")
+</code></pre>
+    <p>It is just a display example, but it helps you see how chat bubbles are built.</p>
+
+    <h3>3. Conversation</h3>
+    <p>This page saves the conversation in <code>st.session_state</code>. That means the app remembers what you and the assistant said earlier.</p>
+    <pre><code>if "messages" not in st.session_state:
+    st.session_state.messages = [
+        {"role": "system", "content": "You are a helpful assistant."}
+    ]
+
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]): st.markdown(msg["content"])
+</code></pre>
+    <p>Then it adds each new user message and assistant reply to the history so the chat keeps going.</p>
+
+    <h3>4. Streaming</h3>
+    <p>This page shows how to get a response as it arrives, chunk by chunk.</p>
+    <pre><code>payload = {
+  "model": "llama3.2",
+  "messages": st.session_state.messages,
+  "stream": True
+}
+with requests.post("http://localhost:11434/api/chat", json=payload, stream=True) as response:
+    for line in response.iter_lines():
+        if line:
+            chunk = json.loads(line)
+            st.write(chunk)
+</code></pre>
+    <p>The app prints each streamed piece so you can see the model answer grow over time.</p>
+
+    <h3>5. Tool Calling</h3>
+    <p>This page teaches a new idea: the model can choose to call a tool instead of answering directly.</p>
+    <pre><code>tools = [
+  {
+    "type": "function",
+    "function": {
+      "name": "get_weather",
+      "description": "Get the current weather for a given city",
+      "parameters": { ... }
+    }
+  }
+]
+</code></pre>
+    <p>The model sees these tools and can decide to use one. The response will include a tool call if it wants that help.</p>
+
+    <h3>6. Tool Function Call</h3>
+    <p>This page is a complete example of a tool call and tool execution.</p>
+    <pre><code>def string_processor(params):
+    input_string = params["input"]
+    return input_string[::-1].upper()
+
+if message.get("tool_calls"):
+    args = message["tool_calls"][0]["function"]["arguments"]
+    result = string_processor(obj)
+    st.markdown(result)
+</code></pre>
+    <p>It shows how to:</p>
+    <ul>
+      <li>define a tool function</li>
+      <li>detect if the model requested a tool</li>
+      <li>run the tool and show the result</li>
+    </ul>
+
+    <h2>Key beginner concepts</h2>
+    <h3>Messages and roles</h3>
+    <p>The request body often uses a list called <code>messages</code>. Each message has a <code>role</code>:</p>
+    <ul>
+      <li><strong>system</strong>: sets the assistant's behavior</li>
+      <li><strong>user</strong>: the question or prompt you type</li>
+      <li><strong>assistant</strong>: the model's reply</li>
+    </ul>
+
+    <h3>Why the system prompt matters</h3>
+    <p>The system prompt is how you tell the model what kind of assistant to be. For example, ask it to act like a pirate or a cat:</p>
+    <pre><code>{"role": "system", "content": "You are a helpful assistant."}</code></pre>
+
+    <h3>What is a model payload?</h3>
+    <p>The payload is the data sent to the model server. Common fields are:</p>
+    <ul>
+      <li><code>model</code>: which model to use</li>
+      <li><code>messages</code>: chat history</li>
+      <li><code>stream</code>: true or false</li>
+      <li><code>tools</code>: optional tool definitions for the model</li>
+    </ul>
+
+    <h3>Tool calling in simple words</h3>
+    <p>Normally the model replies with text. With tool calling, the model can instead say:</p>
+    <blockquote>"Please run this tool with these inputs."</blockquote>
+    <p>Then the app runs the tool and returns the tool result to the user.</p>
+
+    <h2>Why this lesson is useful</h2>
+    <p>W3D4 teaches three main beginner skills:</p>
+    <ol>
+      <li>how to build chat UI pages with Streamlit</li>
+      <li>how to send model requests and read responses</li>
+      <li>how to add tools so your assistant can do things beyond just talking</li>
+    </ol>
+
+    <div class="box tip">
+      <strong>Try this first:</strong> run the Basic page, ask a simple question, then open the JSON response and find only the assistant answer inside it.
+    </div>
+
+    <h2>Quick checklist for a beginner</h2>
+    <ul>
+      <li>Open <code>W3D4/app.py</code> and see the home page text.</li>
+      <li>Open <code>W3D4/pages/1 1 Basic.py</code> and study the request code.</li>
+      <li>Open <code>W3D4/pages/2 2.2 Conversation.py</code> to understand chat history.</li>
+      <li>Open <code>W3D4/pages/4 4.4 Tool Function Call.py</code> to learn how a tool is defined and used.</li>
+      <li>Run the app with <code>streamlit run app.py</code> and click the pages.</li>
+    </ul>
+
+    <h2>Final advice</h2>
+    <p>The easiest way to learn is to change one thing at a time. For example:</p>
+    <ul>
+      <li>change the system prompt</li>
+      <li>change the model name to <code>llama3.2</code></li>
+      <li>print only the assistant text instead of the full JSON</li>
+      <li>make the tool return a different string</li>
+    </ul>
+    <p>When you are ready, try combining the chat history and tool calls in the same page.</p>
+  </div>
+</body>
+</html>

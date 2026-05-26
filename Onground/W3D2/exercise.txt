@@ -1,0 +1,42 @@
+Exercise 1A: Label the Pipeline
+Exercise: For the sentence "The decoder generated a summary", 
+list a plausible sequence of stages from raw text to model prediction. 
+Leave room for token ids, embeddings, attention, and output logits.
+
+Solution: The Transformer Pipeline for Your Sentence
+Raw Text Input
+    ↓
+1. TOKENIZATION
+   "The decoder generated a summary" 
+   → token_ids = [101, 1996, 24992, 2686, 1037, 6625, 102]
+   (These are example token IDs from a BERT-like tokenizer)
+   
+   ↓
+2. EMBEDDING LOOKUP
+   token_ids → embedding vectors (shape: [7, 768])
+   (Each token becomes a 768-dim dense vector)
+   
+   ↓
+3. POSITION ENCODING
+   Add positional information (so attention knows token order)
+   embedding + position_embedding → positional embeddings
+   
+   ↓
+4. SELF-ATTENTION
+   Tokens compare with each other:
+   - "The" attends to "decoder", "generated", "a", "summary"
+   - "decoder" attends to "The", "generated", etc.
+   Result: contextual vectors with enriched information
+   
+   ↓
+5. FEED-FORWARD LAYERS
+   Pass each contextual vector through dense transformations
+   → hidden states (updated representations)
+   
+   ↓
+6. PREDICTION HEAD
+   hidden states → output logits
+   (For classification: class logits; for generation: token logits)
+   
+   ↓
+Output

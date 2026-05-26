@@ -1,0 +1,9 @@
+ollama
+sqlalchemy
+pgvector
+psycopg2-binary
+numpy
+scikit-learn
+plotly
+umap-learn
+jupyter
