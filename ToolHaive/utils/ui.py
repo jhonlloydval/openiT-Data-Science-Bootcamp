@@ -621,3 +621,74 @@ def render_output_box(content: str):
       </div>
     </div>
     """)
+
+
+# ── New tool UI helpers ────────────────────────────────────────────────────────
+
+def render_label(text: str):
+    """Render a small section label above a widget."""
+    render_html(f"""
+    <div style="
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin: 20px 0 6px;
+    ">{escape_html(text)}</div>
+    """)
+
+
+def render_section_divider():
+    """Thin divider between tool sections."""
+    render_html("""
+    <hr style="border:none;border-top:1px solid rgba(0,57,115,0.12);margin:24px 0 20px;">
+    """)
+
+
+def render_grammar_badge(label: str, color: str = "#003973"):
+    """Inline badge used in Grammar Checker output legend."""
+    render_html(f"""
+    <span style="
+      display: inline-block;
+      background: {color};
+      color: white;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-right: 6px;
+    ">{escape_html(label)}</span>
+    """)
+
+
+def render_tool_tip(message: str):
+    """Light info-tip box for tool instructions."""
+    render_html(f"""
+    <div style="
+      background: rgba(0,57,115,0.06);
+      border-left: 3px solid var(--navy-mid);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--ink-mid);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    ">💡 {escape_html(message)}</div>
+    """)
+
+
+def render_output_header(title: str):
+    """Bold section header used above AI output blocks."""
+    render_html(f"""
+    <div style="
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 28px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid rgba(0,57,115,0.15);
+    ">{escape_html(title)}</div>
+    """)
