@@ -11,8 +11,9 @@ Custom user tools are loaded from data/custom_tools.json and merged here.
 
 import json
 import os
+import html
 import streamlit as st
-from utils.ui import inject_styles, render_navbar, FILTER_JS
+from utils.ui import inject_styles, render_html, render_navbar
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -128,63 +129,97 @@ BUILTIN_TOOLS = [
 # ── Load custom tools from JSON ───────────────────────────────────────────────
 CUSTOM_TOOLS_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "custom_tools.json")
 
+DEFAULT_CUSTOM_ICON = '<path d="M12 5v14M5 12h14"/>'
+
+
 def load_custom_tools() -> list[dict]:
     try:
         if os.path.exists(CUSTOM_TOOLS_PATH):
             with open(CUSTOM_TOOLS_PATH) as f:
-                return json.load(f)
+                data = json.load(f)
+                return data if isinstance(data, list) else []
     except Exception:
         pass
     return []
 
-ALL_TOOLS = BUILTIN_TOOLS + load_custom_tools()
+def normalize_custom_tool(tool: dict, idx: int) -> dict:
+    name = str(tool.get("name") or f"Custom Tool {idx + 1}")
+    cat = str(tool.get("cat") or tool.get("category") or "custom").lower()
+    return dict(
+        id=str(tool.get("id") or f"custom_{idx}"),
+        name=name,
+        user=str(tool.get("user") or tool.get("target_user") or "User-created assistant"),
+        desc=str(tool.get("desc") or tool.get("description") or "A custom prompt-powered assistant."),
+        cat=cat,
+        cat_label=str(tool.get("cat_label") or cat.title()),
+        turn=str(tool.get("turn") or "single"),
+        cover=str(tool.get("cover") or "cv-8"),
+        page=str(tool.get("page") or "/Custom_Tool_Runner"),
+        icon_svg=str(tool.get("icon_svg") or DEFAULT_CUSTOM_ICON),
+    )
+
+
+CUSTOM_TOOLS = [normalize_custom_tool(t, i) for i, t in enumerate(load_custom_tools()) if isinstance(t, dict)]
+ALL_TOOLS = BUILTIN_TOOLS + CUSTOM_TOOLS
+CATEGORY_OPTIONS = {
+    "All": "all",
+    "Professional": "professional",
+    "Academic": "academic",
+    "Education": "education",
+    "Wellness": "wellness",
+    "Media": "media",
+    "Custom": "custom",
+}
 
 # ── Helper: render a single tool card ────────────────────────────────────────
 def card_html(tool: dict) -> str:
     badge_class = "badge-multi" if tool.get("turn") == "multi" else "badge-single"
     badge_label = "Multi-turn"  if tool.get("turn") == "multi" else "Single-turn"
-    page_href   = tool.get("page", "/Tools_Library")
+    page_href = str(tool.get("page") or "/Tools_Library")
+    if not page_href.startswith("/"):
+        page_href = "/Tools_Library"
+    safe_href = html.escape(page_href, quote=True)
+    safe_name = html.escape(str(tool.get("name", "Untitled Tool")), quote=True)
+    safe_cat = html.escape(str(tool.get("cat", "custom")), quote=True)
+    safe_cover = html.escape(str(tool.get("cover", "cv-8")), quote=True)
+    safe_cat_label = html.escape(str(tool.get("cat_label", "Custom")), quote=True)
+    safe_user = html.escape(str(tool.get("user", "")), quote=True)
+    safe_desc = html.escape(str(tool.get("desc", "")), quote=True)
 
     return f"""
     <div class="th-tool-card"
-         data-cat="{tool['cat']}"
-         data-name="{tool['name'].lower()}"
-         onclick="window.location.href='{page_href}'">
-      <div class="th-card-cover {tool['cover']}">
+         data-cat="{safe_cat}"
+         data-name="{safe_name.lower()}">
+      <div class="th-card-cover {safe_cover}">
         <div class="th-card-cover-hex"></div>
         <div class="th-card-cover-shade"></div>
         <div class="th-card-cover-icon">
-          <svg viewBox="0 0 24 24">{tool['icon_svg']}</svg>
+          <svg viewBox="0 0 24 24">{tool.get('icon_svg', DEFAULT_CUSTOM_ICON)}</svg>
         </div>
       </div>
       <div class="th-card-body">
         <div class="th-card-top-row">
-          <span class="th-card-cat-tag">{tool['cat_label']}</span>
+          <span class="th-card-cat-tag">{safe_cat_label}</span>
           <span class="th-card-turn-badge {badge_class}">{badge_label}</span>
         </div>
-        <div class="th-card-name">{tool['name']}</div>
-        <div class="th-card-user">{tool['user']}</div>
-        <div class="th-card-desc">{tool['desc']}</div>
+        <div class="th-card-name">{safe_name}</div>
+        <div class="th-card-user">{safe_user}</div>
+        <div class="th-card-desc">{safe_desc}</div>
         <div class="th-card-footer">
-          <button class="th-card-launch"
-                  onclick="event.stopPropagation();window.location.href='{page_href}'">
+          <a class="th-card-launch" href="{safe_href}" target="_self">
             Launch
             <svg viewBox="0 0 24 24">
               <line x1="5" y1="12" x2="19" y2="12"/>
               <polyline points="12,5 19,12 12,19"/>
             </svg>
-          </button>
+          </a>
         </div>
       </div>
     </div>
     """
 
-# ── Build all cards HTML ──────────────────────────────────────────────────────
-all_cards_html = "".join(card_html(t) for t in ALL_TOOLS)
-
 add_card_html = """
-<div class="th-card-add" id="th-card-add"
-     onclick="window.location.href='/Custom_Tool_Runner'">
+<div class="th-card-add" id="th-card-add">
   <div class="th-card-add-icon">
     <svg viewBox="0 0 24 24">
       <line x1="12" y1="5" x2="12" y2="19"/>
@@ -196,12 +231,13 @@ add_card_html = """
     Define a name, system prompt, and input format —
     your tool is instantly available in this library.
   </div>
+  <a class="th-card-launch" href="/Custom_Tool_Runner" target="_self">Build Tool</a>
 </div>
 """
 
 # ── Render page ───────────────────────────────────────────────────────────────
-st.markdown(f"""
-<div class="th-page" style="background:var(--cream-light);">
+render_html(f"""
+<div style="padding-top:64px;background:var(--cream-light);">
 
   <!-- ═══════════════  DASHBOARD HERO BAND  ═══════════════ -->
   <div class="th-dash-hero">
@@ -215,49 +251,68 @@ st.markdown(f"""
           {len(ALL_TOOLS)} specialized assistants · Launch any tool or build your own
         </div>
       </div>
-      <button class="th-dash-add-btn"
-              onclick="window.location.href='/Custom_Tool_Runner'">
+      <a class="th-dash-add-btn" href="/Custom_Tool_Runner" target="_self">
         <svg viewBox="0 0 24 24">
           <line x1="12" y1="5" x2="12" y2="19"/>
           <line x1="5"  y1="12" x2="19" y2="12"/>
         </svg>
         Add New Toolkit
-      </button>
+      </a>
     </div>
   </div>
+</div>
+""")
 
-  <!-- ═══════════════  STICKY TOOLBAR  ═══════════════ -->
-  <div class="th-toolbar">
-    <div class="th-toolbar-inner">
-      <div class="th-search-wrap">
-        <svg viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input class="th-search-input"
-               type="text"
-               placeholder="Search tools by name or tag…"
-               oninput="thSearch(this.value)"/>
-      </div>
-      <div class="th-tag-filters">
-        <button class="th-tag-btn active" data-tag="all"
-                onclick="thFilterTag('all')">All</button>
-        <button class="th-tag-btn" data-tag="professional"
-                onclick="thFilterTag('professional')">Professional</button>
-        <button class="th-tag-btn" data-tag="academic"
-                onclick="thFilterTag('academic')">Academic</button>
-        <button class="th-tag-btn" data-tag="education"
-                onclick="thFilterTag('education')">Education</button>
-        <button class="th-tag-btn" data-tag="wellness"
-                onclick="thFilterTag('wellness')">Wellness</button>
-        <button class="th-tag-btn" data-tag="media"
-                onclick="thFilterTag('media')">Media</button>
-      </div>
-      <span class="th-result-count" id="th-result-count">{len(ALL_TOOLS)} tools</span>
+with st.container(key="tool-toolbar"):
+    search_col, category_col, count_col = st.columns([2.2, 3.2, 0.7], vertical_alignment="bottom")
+    with search_col:
+        query = st.text_input(
+            "Search",
+            placeholder="Search tools by name or tag...",
+            label_visibility="collapsed",
+        )
+    with category_col:
+        category_label = st.segmented_control(
+            "Category",
+            options=list(CATEGORY_OPTIONS.keys()),
+            default="All",
+            label_visibility="collapsed",
+        ) or "All"
+
+selected_category = CATEGORY_OPTIONS[category_label]
+query_norm = query.lower().strip()
+
+def matches_filters(tool: dict) -> bool:
+    haystack = " ".join([
+        str(tool.get("name", "")),
+        str(tool.get("cat", "")),
+        str(tool.get("cat_label", "")),
+        str(tool.get("user", "")),
+        str(tool.get("desc", "")),
+    ]).lower()
+    category_match = selected_category == "all" or tool.get("cat") == selected_category
+    query_match = not query_norm or query_norm in haystack
+    return category_match and query_match
+
+
+visible_tools = [tool for tool in ALL_TOOLS if matches_filters(tool)]
+with count_col:
+    st.caption(f"{len(visible_tools)} tool{'s' if len(visible_tools) != 1 else ''}")
+
+cards_html = "".join(card_html(t) for t in visible_tools)
+if selected_category == "all" and not query_norm:
+    cards_html += add_card_html
+
+empty_html = ""
+if not visible_tools:
+    empty_html = """
+    <div class="th-empty-state">
+      No tools match that search. Try another category or keyword.
     </div>
-  </div>
+    """
 
-  <!-- ═══════════════  CARDS GRID  ═══════════════ -->
+render_html(f"""
+<div style="background:var(--cream-light);">
   <div class="th-cards-section">
     <div class="th-cards-inner">
       <div class="th-section-divider">
@@ -266,13 +321,10 @@ st.markdown(f"""
         <div class="th-divider-line"></div>
       </div>
       <div class="th-cards-grid" id="th-cards-grid">
-        {all_cards_html}
-        {add_card_html}
+        {cards_html}
       </div>
+      {empty_html}
     </div>
   </div>
-
 </div>
-
-{FILTER_JS}
-""", unsafe_allow_html=True)
+""")

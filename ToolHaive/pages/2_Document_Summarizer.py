@@ -9,7 +9,7 @@ Assigned to: Iris
 """
 
 import streamlit as st
-from utils.ui import inject_styles, render_navbar, render_tool_header, close_tool_body
+from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body_container
 from utils.ollama_client import chat
 
 st.set_page_config(
@@ -40,30 +40,29 @@ Bullet list of any recommended actions, next steps, or decisions mentioned.
 If there are no action items, write: None identified."""
 
 # ── UI ────────────────────────────────────────────────────────────────────────
-st.markdown("#### Paste your document or text below")
-user_text = st.text_area(
-    label       = "Document text",
-    label_visibility = "collapsed",
-    placeholder = "Paste an article, report, email, research paper, or any text here…",
-    height      = 280,
-)
+with tool_body_container():
+    st.markdown("#### Paste your document or text below")
+    user_text = st.text_area(
+        label       = "Document text",
+        label_visibility = "collapsed",
+        placeholder = "Paste an article, report, email, research paper, or any text here…",
+        height      = 280,
+    )
 
-col1, col2 = st.columns([1, 5])
-with col1:
-    run = st.button("Summarize →", use_container_width=True)
-with col2:
-    if st.button("Clear", use_container_width=False):
-        st.rerun()
+    col1, col2 = st.columns([1, 5])
+    with col1:
+        run = st.button("Summarize →", use_container_width=True)
+    with col2:
+        if st.button("Clear", use_container_width=False):
+            st.rerun()
 
-if run and user_text.strip():
-    messages = [
-        {"role": "system",  "content": SYSTEM_PROMPT},
-        {"role": "user",    "content": user_text},
-    ]
-    with st.spinner("Analyzing…"):
-        result = chat(messages)
-    st.markdown(result)
-elif run:
-    st.warning("Please paste some text first.")
-
-close_tool_body()
+    if run and user_text.strip():
+        messages = [
+            {"role": "system",  "content": SYSTEM_PROMPT},
+            {"role": "user",    "content": user_text},
+        ]
+        with st.spinner("Analyzing…"):
+            result = chat(messages)
+        st.markdown(result)
+    elif run:
+        st.warning("Please paste some text first.")

@@ -4,7 +4,7 @@ Assigned to: Iris
 """
 
 import streamlit as st
-from utils.ui import inject_styles, render_navbar, render_tool_header, close_tool_body
+from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body_container
 from utils.ollama_client import chat
 
 st.set_page_config(
@@ -36,29 +36,28 @@ State one of: Excellent / Good / Needs Improvement — and a brief one-sentence 
 Numbered list of 3 specific, actionable recommendations tailored to the student's profile."""
 
 # ── Inputs ────────────────────────────────────────────────────────────────────
-col1, col2 = st.columns(2)
-with col1:
-    study_hours  = st.slider("Study hours per week", 0, 40, 10)
-    attendance   = st.slider("Attendance rate (%)", 0, 100, 80)
-    past_grade   = st.number_input("Past average grade (%)", 0.0, 100.0, 75.0, step=0.5)
-with col2:
-    completion   = st.slider("Assignment completion rate (%)", 0, 100, 85)
-    engagement   = st.slider("Self-assessed engagement (1 = low, 10 = high)", 1, 10, 6)
+with tool_body_container():
+    col1, col2 = st.columns(2)
+    with col1:
+        study_hours  = st.slider("Study hours per week", 0, 40, 10)
+        attendance   = st.slider("Attendance rate (%)", 0, 100, 80)
+        past_grade   = st.number_input("Past average grade (%)", 0.0, 100.0, 75.0, step=0.5)
+    with col2:
+        completion   = st.slider("Assignment completion rate (%)", 0, 100, 85)
+        engagement   = st.slider("Self-assessed engagement (1 = low, 10 = high)", 1, 10, 6)
 
-if st.button("Predict Performance →"):
-    user_message = (
-        f"Study hours per week: {study_hours}\n"
-        f"Attendance rate: {attendance}%\n"
-        f"Past average grade: {past_grade}%\n"
-        f"Assignment completion rate: {completion}%\n"
-        f"Self-assessed engagement: {engagement}/10"
-    )
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user",   "content": user_message},
-    ]
-    with st.spinner("Calculating prediction…"):
-        result = chat(messages)
-    st.markdown(result)
-
-close_tool_body()
+    if st.button("Predict Performance →"):
+        user_message = (
+            f"Study hours per week: {study_hours}\n"
+            f"Attendance rate: {attendance}%\n"
+            f"Past average grade: {past_grade}%\n"
+            f"Assignment completion rate: {completion}%\n"
+            f"Self-assessed engagement: {engagement}/10"
+        )
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user",   "content": user_message},
+        ]
+        with st.spinner("Calculating prediction…"):
+            result = chat(messages)
+        st.markdown(result)

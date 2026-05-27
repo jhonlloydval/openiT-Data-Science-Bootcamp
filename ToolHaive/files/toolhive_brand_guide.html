@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ToolHive AI — Brand Style Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #003973;
+    --navy-mid: #0056A3;
+    --sky: #7AB1E3;
+    --cream: #E5E5BE;
+    --cream-light: #F5F5E8;
+    --cream-dark: #C8C89A;
+    --white: #FFFFFF;
+    --ink: #0A1628;
+    --ink-mid: #2A3A5C;
+    --ink-muted: #6B7A96;
+    --grad: linear-gradient(135deg, #003973 0%, #0056A3 40%, #7AB1E3 75%, #E5E5BE 100%);
+    --grad-h: linear-gradient(90deg, #003973 0%, #0056A3 40%, #7AB1E3 75%, #E5E5BE 100%);
+    --grad-v: linear-gradient(180deg, #003973 0%, #0056A3 50%, #E5E5BE 100%);
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: #F8F8F2;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    min-height: 100vh;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 800px 600px at 20% 50%, rgba(0,56,115,0.6) 0%, transparent 70%),
+      radial-gradient(ellipse 600px 500px at 80% 30%, rgba(122,177,227,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 400px 400px at 60% 80%, rgba(229,229,190,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .cover-hex-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='115' viewBox='0 0 100 115'%3E%3Cpolygon points='50,5 95,28 95,72 50,95 5,72 5,28' fill='none' stroke='%23E5E5BE' stroke-width='1'/%3E%3C/svg%3E");
+    background-size: 100px 115px;
+  }
+  .cover-content { position: relative; z-index: 2; text-align: center; max-width: 900px; }
+  .cover-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--sky);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0.8;
+  }
+  .cover-logo { margin-bottom: 40px; }
+  .cover-logo svg { width: 100px; height: 100px; }
+  .cover-wordmark {
+    font-family: var(--font-display);
+    font-size: clamp(56px, 10vw, 96px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    background: var(--grad-h);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+  .cover-tagline {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(229,229,190,0.7);
+    letter-spacing: 0.05em;
+    margin-bottom: 60px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 48px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .cover-meta-item { text-align: center; }
+  .cover-meta-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-muted); font-family: var(--font-mono); }
+  .cover-meta-value { font-size: 14px; color: var(--cream); font-weight: 500; margin-top: 4px; }
+  .cover-divider {
+    width: 1px;
+    height: 60px;
+    background: rgba(229,229,190,0.2);
+    margin: 60px auto 0;
+  }
+  .cover-scroll {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(229,229,190,0.4);
+    margin-top: 12px;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 100px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  section.full { max-width: none; padding: 100px 0; }
+  .section-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--navy-mid);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .section-sub {
+    font-size: 16px;
+    color: var(--ink-muted);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 64px;
+  }
+  .divider-line {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,56,115,0.15), transparent);
+    margin: 0 auto;
+  }
+
+  /* ── LOGO SECTION ── */
+  .logo-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .logo-panel {
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    min-height: 300px;
+  }
+  .logo-panel.dark { background: var(--ink); }
+  .logo-panel.light { background: var(--cream-light); border: 1px solid rgba(0,56,115,0.08); }
+  .logo-panel.grad { background: var(--grad); }
+  .logo-panel.navy { background: var(--navy); }
+  .logo-panel-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    align-self: flex-start;
+  }
+  .logo-panel.dark .logo-panel-label { color: white; }
+  .logo-panel.grad .logo-panel-label { color: white; }
+  .logo-panel.navy .logo-panel-label { color: rgba(229,229,190,0.5); }
+
+  .wordmark-dark {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: var(--grad-h);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .wordmark-white {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: white;
+  }
+  .wordmark-navy {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--navy);
+  }
+  .wm-sub {
+    font-family: var(--font-body);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-top: -18px;
+  }
+  .wm-sub.on-dark { color: rgba(229,229,190,0.6); }
+  .wm-sub.on-light { color: var(--ink-muted); }
+
+  /* ── ICON SECTION ── */
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+  .icon-card {
+    background: white;
+    border: 1px solid rgba(0,56,115,0.08);
+    border-radius: 20px;
+    padding: 48px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .icon-card-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .icon-card.dark-bg { background: var(--ink); }
+  .icon-card.navy-bg { background: var(--navy); }
+  .icon-size-row {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    background: white;
+    border: 1px solid rgba(0,56,115,0.08);
+    border-radius: 20px;
+    padding: 40px 48px;
+  }
+  .icon-size-item { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .icon-size-label { font-family: var(--font-mono); font-size: 10px; color: var(--ink-muted); letter-spacing: 0.1em; }
+
+  /* ── PALETTE ── */
+  .palette-section { background: var(--ink); }
+  .palette-inner { max-width: 1200px; margin: 0 auto; padding: 100px 60px; }
+  .palette-title { font-family: var(--font-display); font-size: clamp(32px,5vw,52px); font-weight: 700; color: white; letter-spacing: -0.02em; margin-bottom: 12px; }
+  .palette-sub { font-size: 16px; color: rgba(255,255,255,0.4); margin-bottom: 64px; }
+  .palette-num { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; color: var(--sky); text-transform: uppercase; margin-bottom: 12px; }
+
+  .color-row { display: flex; gap: 4px; margin-bottom: 4px; }
+  .color-swatch {
+    flex: 1;
+    height: 80px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 10px 12px;
+    transition: transform 0.2s;
+    cursor: default;
+  }
+  .color-swatch:hover { transform: scaleY(1.05); transform-origin: bottom; }
+  .swatch-name { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.05em; }
+  .swatch-hex { font-family: var(--font-mono); font-size: 10px; font-weight: 500; }
+
+  .gradient-strip {
+    height: 80px;
+    border-radius: 12px;
+    background: var(--grad-h);
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .gradient-strip::after {
+    content: 'Primary Brand Gradient  ·  #003973 → #0056A3 → #7AB1E3 → #E5E5BE';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: white;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+  }
+
+  .palette-usage { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+  .palette-usage-item {
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .usage-dot { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
+  .usage-text { }
+  .usage-role { font-size: 13px; font-weight: 500; color: white; }
+  .usage-desc { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+  /* ── TYPOGRAPHY ── */
+  .type-showcase { }
+  .type-specimen {
+    border: 1px solid rgba(0,56,115,0.08);
+    border-radius: 20px;
+    padding: 64px;
+    background: white;
+    margin-bottom: 24px;
+  }
+  .type-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(0,56,115,0.08);
+  }
+  .type-name { font-family: var(--font-display); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--navy-mid); margin-bottom: 8px; }
+  .type-sample-display { font-family: var(--font-display); font-size: 72px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; color: var(--ink); }
+  .type-sample-body { font-family: var(--font-body); font-size: 18px; font-weight: 300; color: var(--ink-muted); line-height: 1.7; max-width: 600px; }
+  .type-sample-mono { font-family: var(--font-mono); font-size: 16px; color: var(--navy-mid); letter-spacing: 0.05em; }
+  .type-alphabet { font-size: 13px; color: var(--ink-muted); margin-top: 16px; letter-spacing: 0.05em; }
+
+  .type-scale-row { display: flex; align-items: baseline; gap: 32px; padding: 20px 0; border-bottom: 1px solid rgba(0,56,115,0.06); }
+  .type-scale-meta { min-width: 120px; font-family: var(--font-mono); font-size: 10px; color: var(--ink-muted); letter-spacing: 0.08em; }
+  .type-scale-sample { color: var(--ink); font-family: var(--font-body); }
+
+  .type-pair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .type-pair-card { background: white; border: 1px solid rgba(0,56,115,0.08); border-radius: 16px; padding: 40px; }
+  .type-pair-heading { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; margin-bottom: 12px; }
+  .type-pair-body { font-family: var(--font-body); font-size: 15px; font-weight: 300; color: var(--ink-muted); line-height: 1.7; }
+  .type-pair-mono { font-family: var(--font-mono); font-size: 12px; color: var(--navy-mid); margin-top: 12px; letter-spacing: 0.06em; }
+
+  /* ── TOOL CARDS ── */
+  .cards-bg { background: var(--cream-light); }
+  .cards-inner { max-width: 1200px; margin: 0 auto; padding: 100px 60px; }
+  .cards-title { font-family: var(--font-display); font-size: clamp(32px,5vw,52px); font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 12px; }
+  .cards-sub { font-size: 16px; color: var(--ink-muted); margin-bottom: 64px; }
+  .cards-num { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; color: var(--navy-mid); text-transform: uppercase; margin-bottom: 12px; }
+
+  .tool-cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .tool-card {
+    background: white;
+    border: 1px solid rgba(0,56,115,0.1);
+    border-radius: 20px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: default;
+  }
+  .tool-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,56,115,0.12); }
+  .tool-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--grad);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tool-card-icon svg { width: 26px; height: 26px; color: white; fill: none; stroke: white; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .tool-card-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--navy-mid);
+    background: rgba(0,86,163,0.08);
+    padding: 4px 10px;
+    border-radius: 100px;
+    display: inline-block;
+  }
+  .tool-card-name { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+  .tool-card-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.6; flex: 1; }
+  .tool-card-cta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--navy-mid);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tool-card-cta::after { content: '→'; transition: transform 0.2s; }
+  .tool-card:hover .tool-card-cta::after { transform: translateX(4px); }
+  .tool-card.coming-soon { opacity: 0.5; }
+  .tool-card.coming-soon .tool-card-cta { color: var(--ink-muted); }
+  .tool-card.coming-soon .tool-card-cta::after { content: '···'; }
+
+  /* ── UI COMPONENTS ── */
+  .ui-section { background: white; }
+  .ui-inner { max-width: 1200px; margin: 0 auto; padding: 100px 60px; }
+  .ui-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .ui-card { border: 1px solid rgba(0,56,115,0.08); border-radius: 20px; padding: 40px; }
+  .ui-card-title { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 32px; }
+
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .btn {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .btn-primary { background: var(--grad); color: white; }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-secondary { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
+  .btn-secondary:hover { background: rgba(0,56,115,0.06); }
+  .btn-ghost { background: rgba(0,56,115,0.06); color: var(--navy-mid); }
+  .btn-sm { font-size: 12px; padding: 8px 16px; border-radius: 8px; }
+  .btn-lg { font-size: 16px; padding: 16px 36px; border-radius: 12px; }
+
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 4px 12px; border-radius: 100px; font-family: var(--font-mono); letter-spacing: 0.05em; }
+  .badge-blue { background: rgba(0,86,163,0.1); color: var(--navy-mid); }
+  .badge-teal { background: rgba(122,177,227,0.15); color: #1a6a99; }
+  .badge-cream { background: var(--cream); color: #6a6a40; }
+  .badge-green { background: rgba(52,168,83,0.1); color: #1e6e37; }
+  .badges-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .input-demo { margin-top: 16px; }
+  .input-field {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid rgba(0,56,115,0.2);
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--ink);
+    background: white;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 12px;
+  }
+  .input-field:focus { border-color: var(--navy-mid); }
+  .input-label { font-size: 12px; font-weight: 500; color: var(--ink-mid); margin-bottom: 6px; display: block; }
+
+  .alert {
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    border-left: 3px solid;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .alert-info { background: rgba(0,86,163,0.07); border-color: var(--navy-mid); color: var(--navy); }
+  .alert-success { background: rgba(52,168,83,0.07); border-color: #34a853; color: #1e6e37; }
+  .alert-warn { background: rgba(229,229,190,0.6); border-color: var(--cream-dark); color: #5a5a30; }
+
+  /* ── CHAT PREVIEW ── */
+  .chat-preview { background: var(--ink); }
+  .chat-inner { max-width: 1200px; margin: 0 auto; padding: 100px 60px; }
+  .chat-title { font-family: var(--font-display); font-size: clamp(32px,5vw,52px); font-weight: 700; color: white; letter-spacing: -0.02em; margin-bottom: 12px; }
+  .chat-sub { font-size: 16px; color: rgba(255,255,255,0.4); margin-bottom: 64px; }
+  .chat-num { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; color: var(--sky); text-transform: uppercase; margin-bottom: 12px; }
+
+  .chat-window {
+    background: #111827;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+    max-width: 760px;
+  }
+  .chat-bar {
+    background: #0A0F1A;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .chat-bar-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .chat-bar-title { font-family: var(--font-mono); font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; margin-left: auto; margin-right: auto; }
+  .chat-messages { padding: 32px 24px; display: flex; flex-direction: column; gap: 20px; }
+  .chat-msg { display: flex; gap: 12px; align-items: flex-start; }
+  .chat-msg.user { flex-direction: row-reverse; }
+  .chat-avatar {
+    width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; font-family: var(--font-display);
+  }
+  .av-ai { background: var(--grad); color: white; }
+  .av-user { background: rgba(229,229,190,0.15); color: var(--cream); }
+  .chat-bubble {
+    padding: 14px 18px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 480px;
+  }
+  .bubble-ai { background: #1C2333; color: rgba(255,255,255,0.85); border-radius: 4px 18px 18px 18px; }
+  .bubble-user { background: rgba(0,86,163,0.4); color: rgba(255,255,255,0.9); border-radius: 18px 4px 18px 18px; }
+  .chat-input-area { padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; gap: 12px; }
+  .chat-input {
+    flex: 1; background: #1C2333; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 12px 16px; font-size: 14px; color: rgba(255,255,255,0.6);
+    font-family: var(--font-body); outline: none;
+  }
+  .chat-send {
+    background: var(--grad); border: none; border-radius: 12px;
+    width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: white;
+  }
+
+  /* ── ICONOGRAPHY ── */
+  .icons-bg { background: var(--cream-light); }
+  .icons-inner { max-width: 1200px; margin: 0 auto; padding: 100px 60px; }
+  .sub-icons-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .sub-icon-card {
+    background: white;
+    border: 1px solid rgba(0,56,115,0.08);
+    border-radius: 20px;
+    padding: 40px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
+  .sub-icon-bg {
+    width: 72px; height: 72px; border-radius: 20px;
+    background: var(--grad);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sub-icon-bg svg { width: 36px; height: 36px; stroke: white; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .sub-icon-name { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--ink); }
+  .sub-icon-user { font-size: 12px; color: var(--ink-muted); }
+  .sub-icon-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy-mid); background: rgba(0,86,163,0.08); padding: 3px 10px; border-radius: 100px; }
+
+  /* ── MOTION SECTION ── */
+  .motion-inner { max-width: 1200px; margin: 0 auto; padding: 100px 60px; }
+  .motion-demos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .motion-card { background: white; border: 1px solid rgba(0,56,115,0.08); border-radius: 20px; padding: 48px 32px; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+  .motion-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-muted); }
+  .motion-value { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: var(--ink); }
+  .motion-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.6; }
+
+  .pulse-demo {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: var(--grad);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.15); opacity: 0.7; }
+  }
+  .slide-demo {
+    width: 100px; height: 8px; border-radius: 4px; background: rgba(0,56,115,0.1); overflow: hidden;
+  }
+  .slide-fill {
+    height: 100%; border-radius: 4px; background: var(--grad);
+    animation: slide 2.5s cubic-bezier(0.4,0,0.2,1) infinite;
+  }
+  @keyframes slide {
+    0% { width: 0%; }
+    70% { width: 100%; }
+    100% { width: 100%; }
+  }
+  .fade-demo {
+    width: 60px; height: 60px; border-radius: 14px;
+    background: var(--grad);
+    animation: fade 1.8s ease-in-out infinite;
+  }
+  @keyframes fade {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  /* ── SPACING ── */
+  .spacing-row { display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .spacing-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .spacing-block { background: var(--grad); border-radius: 4px; width: 40px; }
+  .spacing-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; color: var(--ink-muted); }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--ink);
+    padding: 80px 60px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    text-align: center;
+  }
+  .footer-logo { font-family: var(--font-display); font-size: 32px; font-weight: 800; background: var(--grad-h); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.35); letter-spacing: 0.05em; }
+  .footer-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); }
+  .footer-meta { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; color: rgba(255,255,255,0.2); text-transform: uppercase; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,56,115,0.2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-hex-grid"></div>
+  <div class="cover-content">
+    <div class="cover-eyebrow">Brand Identity System · v1.0</div>
+    <div class="cover-logo">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#003973"/>
+            <stop offset="50%" stop-color="#0056A3"/>
+            <stop offset="100%" stop-color="#E5E5BE"/>
+          </linearGradient>
+        </defs>
+        <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="url(#logoGrad)" stroke="rgba(229,229,190,0.2)" stroke-width="1"/>
+        <text x="50" y="44" text-anchor="middle" font-family="Syne,sans-serif" font-size="22" font-weight="800" fill="white" letter-spacing="-1">TH</text>
+        <circle cx="50" cy="59" r="10" fill="none" stroke="rgba(229,229,190,0.6)" stroke-width="1.5"/>
+        <line x1="46" y1="59" x2="54" y2="59" stroke="rgba(229,229,190,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="50" y1="55" x2="50" y2="63" stroke="rgba(229,229,190,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M44 63 L56 63 L58 67 L42 67 Z" fill="rgba(229,229,190,0.3)"/>
+      </svg>
+    </div>
+    <div class="cover-wordmark">ToolHive AI</div>
+    <div class="cover-tagline">Modular GenAI Tools Library</div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Primary Font</div>
+        <div class="cover-meta-value">Syne</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Body Font</div>
+        <div class="cover-meta-value">DM Sans</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Primary Color</div>
+        <div class="cover-meta-value">#003973</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Accent Color</div>
+        <div class="cover-meta-value">#E5E5BE</div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-divider"></div>
+  <div class="cover-scroll">Scroll to explore</div>
+</div>
+
+<!-- LOGO -->
+<div class="divider-line"></div>
+<section>
+  <div class="section-num">01 — Logo System</div>
+  <div class="section-title">The Mark & Wordmark</div>
+  <div class="section-sub">The ToolHive AI logo pairs a hexagonal icon — representing modular, interconnected tools — with the Syne display typeface set at 800 weight. Use only approved lockups.</div>
+</section>
+<div class="logo-showcase">
+  <div class="logo-panel dark">
+    <span class="logo-panel-label">Dark background</span>
+    <svg width="60" height="60" viewBox="0 0 100 100">
+      <defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#003973"/><stop offset="50%" stop-color="#0056A3"/><stop offset="100%" stop-color="#E5E5BE"/></linearGradient></defs>
+      <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="url(#g1)" stroke="rgba(229,229,190,0.2)" stroke-width="1"/>
+      <text x="50" y="44" text-anchor="middle" font-family="Syne,sans-serif" font-size="22" font-weight="800" fill="white" letter-spacing="-1">TH</text>
+      <circle cx="50" cy="59" r="10" fill="none" stroke="rgba(229,229,190,0.6)" stroke-width="1.5"/>
+      <line x1="46" y1="59" x2="54" y2="59" stroke="rgba(229,229,190,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="50" y1="55" x2="50" y2="63" stroke="rgba(229,229,190,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <div class="wordmark-dark">ToolHive AI</div>
+    <div class="wm-sub on-dark">Modular GenAI Tools Library</div>
+  </div>
+  <div class="logo-panel light">
+    <span class="logo-panel-label">Light background</span>
+    <svg width="60" height="60" viewBox="0 0 100 100">
+      <defs><linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#003973"/><stop offset="50%" stop-color="#0056A3"/><stop offset="100%" stop-color="#C8C89A"/></linearGradient></defs>
+      <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="url(#g2)" stroke="rgba(0,56,115,0.1)" stroke-width="1"/>
+      <text x="50" y="44" text-anchor="middle" font-family="Syne,sans-serif" font-size="22" font-weight="800" fill="white" letter-spacing="-1">TH</text>
+      <circle cx="50" cy="59" r="10" fill="none" stroke="rgba(229,229,190,0.8)" stroke-width="1.5"/>
+      <line x1="46" y1="59" x2="54" y2="59" stroke="rgba(229,229,190,0.8)" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="50" y1="55" x2="50" y2="63" stroke="rgba(229,229,190,0.8)" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <div class="wordmark-navy">ToolHive AI</div>
+    <div class="wm-sub on-light">Modular GenAI Tools Library</div>
+  </div>
+  <div class="logo-panel grad">
+    <span class="logo-panel-label">Gradient background</span>
+    <svg width="60" height="60" viewBox="0 0 100 100">
+      <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+      <text x="50" y="44" text-anchor="middle" font-family="Syne,sans-serif" font-size="22" font-weight="800" fill="white" letter-spacing="-1">TH</text>
+      <circle cx="50" cy="59" r="10" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+      <line x1="46" y1="59" x2="54" y2="59" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="50" y1="55" x2="50" y2="63" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <div class="wordmark-white">ToolHive AI</div>
+    <div class="wm-sub on-dark">Modular GenAI Tools Library</div>
+  </div>
+  <div class="logo-panel navy">
+    <span class="logo-panel-label">Navy background</span>
+    <svg width="60" height="60" viewBox="0 0 100 100">
+      <defs><linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="rgba(255,255,255,0.3)"/><stop offset="100%" stop-color="#E5E5BE"/></linearGradient></defs>
+      <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="url(#g3)" stroke="rgba(229,229,190,0.3)" stroke-width="1"/>
+      <text x="50" y="44" text-anchor="middle" font-family="Syne,sans-serif" font-size="22" font-weight="800" fill="#003973" letter-spacing="-1">TH</text>
+      <circle cx="50" cy="59" r="10" fill="none" stroke="#003973" stroke-width="1.5" stroke-opacity="0.5"/>
+      <line x1="46" y1="59" x2="54" y2="59" stroke="#003973" stroke-width="1.5" stroke-opacity="0.5" stroke-linecap="round"/>
+      <line x1="50" y1="55" x2="50" y2="63" stroke="#003973" stroke-width="1.5" stroke-opacity="0.5" stroke-linecap="round"/>
+    </svg>
+    <div class="wordmark-white">ToolHive AI</div>
+    <div class="wm-sub on-dark">Modular GenAI Tools Library</div>
+  </div>
+</div>
+
+<!-- ICON SIZES -->
+<section>
+  <div class="section-num">01b — Icon Sizes</div>
+  <div class="section-title">Icon at Every Scale</div>
+  <div class="section-sub">The hexagonal icon is designed to be legible from 16px app icons to large display contexts. Always maintain aspect ratio. Never stretch, rotate, or recolor outside approved variants.</div>
+  <div class="icon-size-row">
+    <div class="icon-size-item">
+      <svg width="16" height="16" viewBox="0 0 100 100"><defs><linearGradient id="gs16" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#003973"/><stop offset="100%" stop-color="#E5E5BE"/></linearGradient></defs><polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="url(#gs16)"/><text x="50" y="62" text-anchor="middle" font-family="Syne,sans-serif" font-size="40" font-weight="800" fill="white">T</text></svg>
+      <div class="icon-size-label">16px</div>
+    </div>
+    <div class="icon-size-item">
+      <svg width="24" height="24" viewBox="0 0 100 100"><defs><linearGradient id="gs24" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#003973"/><stop offset="100%" stop-color="#E5E5BE"/></linearGradient></defs><polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="url(#gs24)"/><text x="50" y="62" text-anchor="middle" font-family="Syne,sans-serif" font-size="40" font-weight="800" fill="white">T</text></svg>
+      <div class="icon-size-label">24px</div>
+    </div>
+    <div class="icon-size-item">
+      <svg width="32" height="32" viewBox="0 0 100 100"><defs><linearGradient id="gs32" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#003973"/><stop offset="100%" stop-color="#E5E5BE"/></linearGradient></defs><polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="url(#gs32)"/><text x="50" y="62" text-anchor="middle" font-family="Syne,sans-serif" font-size="40" font-weight="800" fill="white">T</text></svg>
+      <div class="icon-size-label">32px</div>
+    </div>
+    <div class="icon-size-item">
+      <svg width="48" height="48" viewBox="0 0 100 100"><defs><linearGradient id="gs48" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#003973"/><stop offset="100%" stop-color="#E5E5BE"/></linearGradient></defs><polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="url(#gs48)"/><text x="50" y="44" text-anchor="middle" font-family="Syne,sans-serif" font-size="22" font-weight="800" fill="white" letter-spacing="-1">TH</text><circle cx="50" cy="59" r="10" fill="none" stroke="rgba(229,229,190,0.6)" stroke-width="1.5"/><line x1="46" y1="59" x2="54" y2="59" stroke="rgba(229,229,190,0.6)" stroke-width="1.5" stroke-linecap="round"/><line x1="50" y1="55" x2="50" y2="63" stroke="rgba(229,229,190,0.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <div class="icon-size-label">48px</div>
+    </div>
+    <div class="icon-size-item">
+      <svg width="72" height="72" viewBox="0 0 100 100"><defs><linearGradient id="gs72" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#003973"/><stop offset="100%" stop-color="#E5E5BE"/></linearGradient></defs><polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="url(#gs72)" stroke="rgba(229,229,190,0.2)" stroke-width="1"/><text x="50" y="44" text-anchor="middle" font-family="Syne,sans-serif" font-size="22" font-weight="800" fill="white" letter-spacing="-1">TH</text><circle cx="50" cy="59" r="10" fill="none" stroke="rgba(229,229,190,0.6)" stroke-width="1.5"/><line x1="46" y1="59" x2="54" y2="59" stroke="rgba(229,229,190,0.6)" stroke-width="1.5" stroke-linecap="round"/><line x1="50" y1="55" x2="50" y2="63" stroke="rgba(229,229,190,0.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <div class="icon-size-label">72px</div>
+    </div>
+    <div class="icon-size-item">
+      <svg width="120" height="120" viewBox="0 0 100 100"><defs><linearGradient id="gs120" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#003973"/><stop offset="50%" stop-color="#0056A3"/><stop offset="100%" stop-color="#E5E5BE"/></linearGradient></defs><polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="url(#gs120)" stroke="rgba(229,229,190,0.2)" stroke-width="1"/><text x="50" y="44" text-anchor="middle" font-family="Syne,sans-serif" font-size="22" font-weight="800" fill="white" letter-spacing="-1">TH</text><circle cx="50" cy="59" r="10" fill="none" stroke="rgba(229,229,190,0.6)" stroke-width="1.5"/><line x1="46" y1="59" x2="54" y2="59" stroke="rgba(229,229,190,0.6)" stroke-width="1.5" stroke-linecap="round"/><line x1="50" y1="55" x2="50" y2="63" stroke="rgba(229,229,190,0.6)" stroke-width="1.5" stroke-linecap="round"/><path d="M44 63 L56 63 L58 67 L42 67 Z" fill="rgba(229,229,190,0.3)"/></svg>
+      <div class="icon-size-label">120px</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- COLOR PALETTE -->
+<div class="palette-section">
+  <div class="palette-inner">
+    <div class="palette-num">02 — Color System</div>
+    <div class="palette-title">Color Palette</div>
+    <div class="palette-sub">Built on the primary gradient from Deep Navy #003973 to Warm Cream #E5E5BE, evoking trust, intelligence, and approachability.</div>
+
+    <div class="gradient-strip"></div>
+
+    <div class="color-row">
+      <div class="color-swatch" style="background:#003973;">
+        <div class="swatch-name" style="color:rgba(229,229,190,0.5);">Navy</div>
+        <div class="swatch-hex" style="color:rgba(229,229,190,0.9);">#003973</div>
+      </div>
+      <div class="color-swatch" style="background:#00468A;">
+        <div class="swatch-name" style="color:rgba(229,229,190,0.5);">Navy 80</div>
+        <div class="swatch-hex" style="color:rgba(229,229,190,0.9);">#00468A</div>
+      </div>
+      <div class="color-swatch" style="background:#0056A3;">
+        <div class="swatch-name" style="color:rgba(229,229,190,0.5);">Navy Mid</div>
+        <div class="swatch-hex" style="color:rgba(229,229,190,0.9);">#0056A3</div>
+      </div>
+      <div class="color-swatch" style="background:#4D8EC5;">
+        <div class="swatch-name" style="color:rgba(255,255,255,0.7);">Sky Mid</div>
+        <div class="swatch-hex" style="color:white;">#4D8EC5</div>
+      </div>
+      <div class="color-swatch" style="background:#7AB1E3;">
+        <div class="swatch-name" style="color:rgba(0,56,115,0.6);">Sky</div>
+        <div class="swatch-hex" style="color:#003973;">#7AB1E3</div>
+      </div>
+      <div class="color-swatch" style="background:#B8E1FF;">
+        <div class="swatch-name" style="color:rgba(0,56,115,0.5);">Sky Light</div>
+        <div class="swatch-hex" style="color:#003973;">#B8E1FF</div>
+      </div>
+      <div class="color-swatch" style="background:#C8C89A;">
+        <div class="swatch-name" style="color:rgba(0,56,115,0.5);">Cream Dark</div>
+        <div class="swatch-hex" style="color:#003973;">#C8C89A</div>
+      </div>
+      <div class="color-swatch" style="background:#E5E5BE;">
+        <div class="swatch-name" style="color:rgba(0,56,115,0.5);">Cream</div>
+        <div class="swatch-hex" style="color:#003973;">#E5E5BE</div>
+      </div>
+      <div class="color-swatch" style="background:#F5F5E8; border: 1px solid rgba(0,56,115,0.1);">
+        <div class="swatch-name" style="color:rgba(0,56,115,0.4);">Cream Light</div>
+        <div class="swatch-hex" style="color:#003973;">#F5F5E8</div>
+      </div>
+    </div>
+    <div class="color-row" style="margin-top:16px;">
+      <div class="color-swatch" style="background:#0A1628;">
+        <div class="swatch-name" style="color:rgba(255,255,255,0.4);">Ink Dark</div>
+        <div class="swatch-hex" style="color:rgba(255,255,255,0.8);">#0A1628</div>
+      </div>
+      <div class="color-swatch" style="background:#1C2333;">
+        <div class="swatch-name" style="color:rgba(255,255,255,0.4);">Ink</div>
+        <div class="swatch-hex" style="color:rgba(255,255,255,0.8);">#1C2333</div>
+      </div>
+      <div class="color-swatch" style="background:#2A3A5C;">
+        <div class="swatch-name" style="color:rgba(255,255,255,0.5);">Ink Mid</div>
+        <div class="swatch-hex" style="color:rgba(255,255,255,0.8);">#2A3A5C</div>
+      </div>
+      <div class="color-swatch" style="background:#6B7A96;">
+        <div class="swatch-name" style="color:rgba(255,255,255,0.7);">Ink Muted</div>
+        <div class="swatch-hex" style="color:white;">#6B7A96</div>
+      </div>
+      <div class="color-swatch" style="background:#34A853;">
+        <div class="swatch-name" style="color:rgba(255,255,255,0.7);">Success</div>
+        <div class="swatch-hex" style="color:white;">#34A853</div>
+      </div>
+      <div class="color-swatch" style="background:#FBBC04;">
+        <div class="swatch-name" style="color:rgba(0,0,0,0.5);">Warning</div>
+        <div class="swatch-hex" style="color:#333;">#FBBC04</div>
+      </div>
+      <div class="color-swatch" style="background:#EA4335;">
+        <div class="swatch-name" style="color:rgba(255,255,255,0.7);">Error</div>
+        <div class="swatch-hex" style="color:white;">#EA4335</div>
+      </div>
+      <div class="color-swatch" style="background:white; border:1px solid rgba(0,56,115,0.1);">
+        <div class="swatch-name" style="color:rgba(0,56,115,0.4);">White</div>
+        <div class="swatch-hex" style="color:#003973;">#FFFFFF</div>
+      </div>
+    </div>
+
+    <div class="palette-usage">
+      <div class="palette-usage-item" style="background:rgba(0,56,115,0.15);">
+        <div class="usage-dot" style="background:#003973;"></div>
+        <div class="usage-text">
+          <div class="usage-role">Primary · #003973</div>
+          <div class="usage-desc">CTAs, logo, headers, primary interactive elements</div>
+        </div>
+      </div>
+      <div class="palette-usage-item" style="background:rgba(122,177,227,0.12);">
+        <div class="usage-dot" style="background:#7AB1E3;"></div>
+        <div class="usage-text">
+          <div class="usage-role">Accent · #7AB1E3</div>
+          <div class="usage-desc">Highlights, tags, secondary interactive states</div>
+        </div>
+      </div>
+      <div class="palette-usage-item" style="background:rgba(229,229,190,0.12);">
+        <div class="usage-dot" style="background:#E5E5BE;"></div>
+        <div class="usage-text">
+          <div class="usage-role">Warm Neutral · #E5E5BE</div>
+          <div class="usage-desc">Backgrounds, surface tints, coming-soon states</div>
+        </div>
+      </div>
+      <div class="palette-usage-item" style="background:rgba(255,255,255,0.06);">
+        <div class="usage-dot" style="background:#0A1628;"></div>
+        <div class="usage-text">
+          <div class="usage-role">Ink · #0A1628</div>
+          <div class="usage-desc">Body copy, dark surfaces, chat backgrounds</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider-line"></div>
+
+<!-- TYPOGRAPHY -->
+<section>
+  <div class="section-num">03 — Typography</div>
+  <div class="section-title">Type System</div>
+  <div class="section-sub">Three families — each with a distinct role. Syne for identity and impact. DM Sans for clarity and reading. DM Mono for data and technical contexts.</div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="type-specimen">
+    <div class="type-label">Display · Syne 800 — Headings, wordmarks, hero text</div>
+    <div class="type-name">Syne · 800 Weight</div>
+    <div class="type-sample-display">Build smarter<br/>with AI tools.</div>
+    <div class="type-alphabet" style="font-family:'Syne',sans-serif; font-weight:800; margin-top:24px;">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</div>
+    <div class="type-alphabet" style="font-family:'Syne',sans-serif; font-weight:800;">a b c d e f g h i j k l m n o p q r s t u v w x y z  0 1 2 3 4 5 6 7 8 9</div>
+  </div>
+
+  <div class="type-specimen">
+    <div class="type-label">Body · DM Sans 300–500 — UI text, descriptions, long-form</div>
+    <div class="type-name">DM Sans · 300 / 400 / 500 Weight</div>
+    <div class="type-sample-body">ToolHive AI is a modular GenAI tools library that packages different AI workflows into focused assistants, helping users choose the right AI tool for the right task instead of relying on one generic chatbot.</div>
+    <div class="type-alphabet" style="font-family:'DM Sans',sans-serif; font-weight:400; margin-top:20px; font-size:14px; color:#6B7A96;">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z  ·  a b c d e f g h i j k l m n o p q r s t u v w x y z  ·  0 1 2 3 4 5 6 7 8 9</div>
+  </div>
+
+  <div class="type-specimen">
+    <div class="type-label">Mono · DM Mono 400–500 — Labels, codes, metadata, tags</div>
+    <div class="type-name">DM Mono · 400 / 500 Weight</div>
+    <div class="type-sample-mono">MODEL: llama3.2 · CHUNKS: 512px · SIMILARITY: 0.87 · STATUS: ACTIVE</div>
+    <div class="type-sample-mono" style="margin-top:12px; font-weight:400; opacity:0.6;">version 1.0.0 · api_key: th_••••••••••••ab4f · tokens_used: 2,841</div>
+  </div>
+
+  <!-- Type Scale -->
+  <div style="background: white; border: 1px solid rgba(0,56,115,0.08); border-radius: 20px; padding: 40px 48px; margin-bottom: 24px;">
+    <div class="type-label">Type Scale</div>
+    <div class="type-scale-row">
+      <div class="type-scale-meta">96 · Syne 800</div>
+      <div class="type-scale-sample" style="font-family:'Syne',sans-serif; font-weight:800; font-size:48px; letter-spacing:-0.03em; line-height:1;">Hero</div>
+    </div>
+    <div class="type-scale-row">
+      <div class="type-scale-meta">64 · Syne 700</div>
+      <div class="type-scale-sample" style="font-family:'Syne',sans-serif; font-weight:700; font-size:36px; letter-spacing:-0.02em; line-height:1;">Display Title</div>
+    </div>
+    <div class="type-scale-row">
+      <div class="type-scale-meta">40 · Syne 700</div>
+      <div class="type-scale-sample" style="font-family:'Syne',sans-serif; font-weight:700; font-size:28px; letter-spacing:-0.01em;">Section Heading</div>
+    </div>
+    <div class="type-scale-row">
+      <div class="type-scale-meta">24 · DM Sans 500</div>
+      <div class="type-scale-sample" style="font-weight:500; font-size:22px;">Card Title or Subheading</div>
+    </div>
+    <div class="type-scale-row">
+      <div class="type-scale-meta">18 · DM Sans 400</div>
+      <div class="type-scale-sample" style="font-weight:400; font-size:18px;">Body large — lead paragraphs and introductions</div>
+    </div>
+    <div class="type-scale-row">
+      <div class="type-scale-meta">15 · DM Sans 400</div>
+      <div class="type-scale-sample" style="font-weight:400; font-size:15px;">Body regular — standard interface copy and descriptions</div>
+    </div>
+    <div class="type-scale-row">
+      <div class="type-scale-meta">13 · DM Sans 400</div>
+      <div class="type-scale-sample" style="font-weight:400; font-size:13px; color:#6B7A96;">Caption — supporting details, helper text, timestamps</div>
+    </div>
+    <div class="type-scale-row" style="border:none;">
+      <div class="type-scale-meta">11 · DM Mono</div>
+      <div class="type-scale-sample" style="font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.15em; color:#0056A3; text-transform:uppercase;">Label — tags, metadata, eyebrow text</div>
+    </div>
+  </div>
+
+  <div class="type-pair-grid">
+    <div class="type-pair-card">
+      <div class="type-label">Interview Coach</div>
+      <div class="type-pair-heading">Practice with a real-time AI interviewer</div>
+      <div class="type-pair-body">Get instant feedback on your answers, identify weak points, and learn how to frame stronger responses for your target role.</div>
+      <div class="type-pair-mono">Syne 700 / DM Sans 300 / DM Mono label</div>
+    </div>
+    <div class="type-pair-card" style="background: var(--ink);">
+      <div class="type-label" style="color:rgba(255,255,255,0.3);">Policy Assistant</div>
+      <div class="type-pair-heading" style="color:white;">Ask anything about your company policies</div>
+      <div class="type-pair-body" style="color:rgba(255,255,255,0.5);">Semantic search across curated compliance documents. Get cited, trustworthy answers in seconds — not a wall of PDFs.</div>
+      <div class="type-pair-mono" style="color:var(--sky);">Syne 700 / DM Sans 300 · Dark surface</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- TOOL CARDS -->
+<div class="cards-bg">
+  <div class="cards-inner">
+    <div class="cards-num">04 — Component Library</div>
+    <div class="cards-title">Tool Cards</div>
+    <div class="cards-sub">The primary browsing surface. Cards carry the tool's icon, name, target user, description, and capability tag. Coming soon tools use reduced opacity.</div>
+    <div class="tool-cards-grid">
+      <div class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div><span class="tool-card-tag">Conversation · Memory</span></div>
+        <div class="tool-card-name">Interview Coach</div>
+        <div class="tool-card-desc">Mock interviews with instant feedback and improved answer suggestions for job seekers.</div>
+        <div class="tool-card-cta">Open Tool</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div><span class="tool-card-tag">Summarization</span></div>
+        <div class="tool-card-name">Doc Summarizer</div>
+        <div class="tool-card-desc">Paste any document to extract key points, simplify content, and generate action items.</div>
+        <div class="tool-card-cta">Open Tool</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div><span class="tool-card-tag">RAG · Retrieval</span></div>
+        <div class="tool-card-name">Policy Assistant</div>
+        <div class="tool-card-desc">Semantic search across curated policy docs. Answers with source references for compliance teams.</div>
+        <div class="tool-card-cta">Open Tool</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </div>
+        <div><span class="tool-card-tag">Roleplay · Persona</span></div>
+        <div class="tool-card-name">Roleplay Creator</div>
+        <div class="tool-card-desc">Design custom AI personas for training scenarios — interviewer, customer, manager, or historical figure.</div>
+        <div class="tool-card-cta">Open Tool</div>
+      </div>
+      <div class="tool-card coming-soon">
+        <div class="tool-card-icon" style="background: rgba(0,56,115,0.15);">
+          <svg viewBox="0 0 24 24" style="stroke:#6B7A96;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div><span class="tool-card-tag" style="opacity:0.5;">HR Support</span></div>
+        <div class="tool-card-name" style="color:#6B7A96;">HR Assistant</div>
+        <div class="tool-card-desc">Employee Q&amp;A and policy interpretation for HR professionals.</div>
+        <div class="tool-card-cta">Coming Soon</div>
+      </div>
+      <div class="tool-card coming-soon">
+        <div class="tool-card-icon" style="background: rgba(0,56,115,0.15);">
+          <svg viewBox="0 0 24 24" style="stroke:#6B7A96;"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div><span class="tool-card-tag" style="opacity:0.5;">Tutoring</span></div>
+        <div class="tool-card-name" style="color:#6B7A96;">Study Helper</div>
+        <div class="tool-card-desc">Adaptive quizzes, concept explanations, and progress tracking for students.</div>
+        <div class="tool-card-cta">Coming Soon</div>
+      </div>
+      <div class="tool-card coming-soon">
+        <div class="tool-card-icon" style="background: rgba(0,56,115,0.15);">
+          <svg viewBox="0 0 24 24" style="stroke:#6B7A96;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div><span class="tool-card-tag" style="opacity:0.5;">Writing</span></div>
+        <div class="tool-card-name" style="color:#6B7A96;">Email Writer</div>
+        <div class="tool-card-desc">AI-drafted business emails tailored to tone, audience, and purpose.</div>
+        <div class="tool-card-cta">Coming Soon</div>
+      </div>
+      <div class="tool-card coming-soon">
+        <div class="tool-card-icon" style="background: rgba(0,56,115,0.15);">
+          <svg viewBox="0 0 24 24" style="stroke:#6B7A96;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div><span class="tool-card-tag" style="opacity:0.5;">Creative</span></div>
+        <div class="tool-card-name" style="color:#6B7A96;">Marketing Copy</div>
+        <div class="tool-card-desc">Generate compelling marketing copy, taglines, and campaign descriptions.</div>
+        <div class="tool-card-cta">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider-line"></div>
+
+<!-- SUB-BRAND ICONS -->
+<div class="icons-bg">
+  <div class="icons-inner">
+    <div class="section-num">05 — Sub-Brand Icons</div>
+    <div class="section-title">Tool Iconography</div>
+    <div class="section-sub">Each tool receives a dedicated icon using the primary brand gradient on a rounded square container. Icons use consistent stroke weight (1.6px) and padding.</div>
+    <div class="sub-icons-grid">
+      <div class="sub-icon-card">
+        <div class="sub-icon-bg">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="sub-icon-name">Interview Coach</div>
+        <div class="sub-icon-user">Job Applicants</div>
+        <div class="sub-icon-tag">Conversation</div>
+      </div>
+      <div class="sub-icon-card">
+        <div class="sub-icon-bg">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="sub-icon-name">Doc Summarizer</div>
+        <div class="sub-icon-user">Students, Researchers</div>
+        <div class="sub-icon-tag">Summarization</div>
+      </div>
+      <div class="sub-icon-card">
+        <div class="sub-icon-bg">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="sub-icon-name">Policy Assistant</div>
+        <div class="sub-icon-user">Compliance, HR</div>
+        <div class="sub-icon-tag">RAG · Retrieval</div>
+      </div>
+      <div class="sub-icon-card">
+        <div class="sub-icon-bg">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </div>
+        <div class="sub-icon-name">Roleplay Creator</div>
+        <div class="sub-icon-user">Trainers, Educators</div>
+        <div class="sub-icon-tag">Persona Design</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider-line"></div>
+
+<!-- UI COMPONENTS -->
+<div class="ui-section">
+  <div class="ui-inner">
+    <div class="section-num">06 — UI Components</div>
+    <div class="section-title">Buttons, Badges & Inputs</div>
+    <div class="section-sub">All interactive components use the brand gradient for primary actions, with a consistent border-radius of 10px for standard elements and 100px for pills.</div>
+    <div class="ui-grid">
+      <div class="ui-card">
+        <div class="ui-card-title">Buttons</div>
+        <div class="btn-row">
+          <button class="btn btn-primary">Open Tool</button>
+          <button class="btn btn-secondary">Learn More</button>
+          <button class="btn btn-ghost">Filter</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-sm">Small CTA</button>
+          <button class="btn btn-secondary btn-sm">Secondary</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-lg">Get Started Free</button>
+        </div>
+      </div>
+      <div class="ui-card">
+        <div class="ui-card-title">Badges & Tags</div>
+        <div class="badges-row" style="margin-bottom:16px;">
+          <span class="badge badge-blue">RAG · Retrieval</span>
+          <span class="badge badge-teal">Summarization</span>
+          <span class="badge badge-cream">Conversation</span>
+          <span class="badge badge-green">Active</span>
+        </div>
+        <div class="badges-row" style="margin-bottom:16px;">
+          <span class="badge" style="background:rgba(0,56,115,0.08);color:#003973;">Interview Coach</span>
+          <span class="badge" style="background:rgba(122,177,227,0.2);color:#1a6a99;">Policy Assistant</span>
+        </div>
+        <div class="badges-row">
+          <span class="badge" style="background:rgba(229,229,190,0.6);color:#6a6a40;border:1px solid rgba(200,200,154,0.5);">Coming Soon</span>
+          <span class="badge" style="background:#003973;color:white;">Featured</span>
+        </div>
+      </div>
+      <div class="ui-card">
+        <div class="ui-card-title">Form Inputs</div>
+        <div class="input-demo">
+          <label class="input-label">Search Tools</label>
+          <input class="input-field" type="text" placeholder="e.g. interview, policy, summarize…" />
+          <label class="input-label">Your Role</label>
+          <input class="input-field" type="text" placeholder="e.g. HR Manager, Student, Researcher" />
+        </div>
+      </div>
+      <div class="ui-card">
+        <div class="ui-card-title">Alerts & Feedback</div>
+        <div class="alert alert-info">
+          <span>ℹ</span>
+          <span>Answer retrieved from 3 policy document chunks. Review sources below.</span>
+        </div>
+        <div class="alert alert-success">
+          <span>✓</span>
+          <span>Your mock interview answer has been saved and scored.</span>
+        </div>
+        <div class="alert alert-warn">
+          <span>⚠</span>
+          <span>This tool is for demo purposes only — not legal advice.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider-line"></div>
+
+<!-- CHAT PREVIEW -->
+<div class="chat-preview">
+  <div class="chat-inner">
+    <div class="chat-num">07 — UI in Context</div>
+    <div class="chat-title">Chat Interface Preview</div>
+    <div class="chat-sub">How ToolHive AI looks in the Interview Coach and Policy Assistant screens. Dark theme with gradient accents for the AI avatar and send button.</div>
+    <div class="chat-window">
+      <div class="chat-bar">
+        <div class="chat-bar-dot" style="background:#EA4335;"></div>
+        <div class="chat-bar-dot" style="background:#FBBC04;"></div>
+        <div class="chat-bar-dot" style="background:#34A853;"></div>
+        <div class="chat-bar-title">Interview Coach · Data Analyst Role</div>
+      </div>
+      <div class="chat-messages">
+        <div class="chat-msg">
+          <div class="chat-avatar av-ai">TH</div>
+          <div class="chat-bubble bubble-ai">Hi! I'm your Interview Coach for a Data Analyst role. Let's start with a common question: <strong style="color:rgba(229,229,190,0.9);">Tell me about yourself and why you're interested in data analytics.</strong></div>
+        </div>
+        <div class="chat-msg user">
+          <div class="chat-avatar av-user">U</div>
+          <div class="chat-bubble bubble-user">I've been working with Excel and SQL for about two years in a marketing role, and I want to move into a more analytical position where I can work with larger datasets.</div>
+        </div>
+        <div class="chat-msg">
+          <div class="chat-avatar av-ai">TH</div>
+          <div class="chat-bubble bubble-ai">Good start! You mentioned experience with tools, which is relevant. To strengthen this answer, try adding a specific project or outcome — for example: <em style="color:rgba(229,229,190,0.7);">"I built a campaign performance dashboard that reduced reporting time by 40%."</em> Concrete results make answers memorable.</div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <input class="chat-input" type="text" placeholder="Type your answer…" />
+        <button class="chat-send">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider-line"></div>
+
+<!-- MOTION & SPACING -->
+<section>
+  <div class="section-num">08 — Motion & Spacing</div>
+  <div class="section-title">Motion Principles & Grid</div>
+  <div class="section-sub">ToolHive AI uses purposeful, subtle animation to reinforce trust and responsiveness. No flashy effects — motion communicates state changes and loading.</div>
+  <div class="motion-demos" style="margin-bottom:64px;">
+    <div class="motion-card">
+      <div class="pulse-demo"></div>
+      <div class="motion-label">Thinking / Loading</div>
+      <div class="motion-value">Pulse</div>
+      <div class="motion-desc">Used when AI is processing a response. 2s ease-in-out loop, 85%→100% scale.</div>
+    </div>
+    <div class="motion-card">
+      <div class="slide-demo"><div class="slide-fill"></div></div>
+      <div class="motion-label">Progress / Retrieval</div>
+      <div class="motion-value">Slide Fill</div>
+      <div class="motion-desc">Document ingestion, embedding progress. 2.5s cubic-bezier(0.4,0,0.2,1).</div>
+    </div>
+    <div class="motion-card">
+      <div class="fade-demo"></div>
+      <div class="motion-label">Streaming Text</div>
+      <div class="motion-value">Fade</div>
+      <div class="motion-desc">Token-by-token text appearance. 1.8s ease-in-out. Gentle, never distracting.</div>
+    </div>
+  </div>
+
+  <!-- Spacing -->
+  <div style="background: white; border: 1px solid rgba(0,56,115,0.08); border-radius: 20px; padding: 48px; margin-bottom: 24px;">
+    <div class="type-label">Spacing Scale · 4px base grid</div>
+    <div class="spacing-row" style="margin-top:24px;">
+      <div class="spacing-item"><div class="spacing-block" style="height:4px;"></div><div class="spacing-label">4px · xs</div></div>
+      <div class="spacing-item"><div class="spacing-block" style="height:8px;"></div><div class="spacing-label">8px · sm</div></div>
+      <div class="spacing-item"><div class="spacing-block" style="height:12px;"></div><div class="spacing-label">12px</div></div>
+      <div class="spacing-item"><div class="spacing-block" style="height:16px;"></div><div class="spacing-label">16px · md</div></div>
+      <div class="spacing-item"><div class="spacing-block" style="height:24px;"></div><div class="spacing-label">24px</div></div>
+      <div class="spacing-item"><div class="spacing-block" style="height:32px;"></div><div class="spacing-label">32px · lg</div></div>
+      <div class="spacing-item"><div class="spacing-block" style="height:48px;"></div><div class="spacing-label">48px · xl</div></div>
+      <div class="spacing-item"><div class="spacing-block" style="height:64px;"></div><div class="spacing-label">64px · 2xl</div></div>
+      <div class="spacing-item"><div class="spacing-block" style="height:96px;"></div><div class="spacing-label">96px · 3xl</div></div>
+    </div>
+  </div>
+
+  <!-- Border Radius -->
+  <div style="background: white; border: 1px solid rgba(0,56,115,0.08); border-radius: 20px; padding: 48px;">
+    <div class="type-label">Border Radius</div>
+    <div style="display:flex; gap:32px; align-items:center; flex-wrap:wrap; margin-top:24px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="width:60px;height:60px;background:var(--grad);border-radius:4px;"></div>
+        <div class="icon-size-label">4px · tags</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="width:60px;height:60px;background:var(--grad);border-radius:8px;"></div>
+        <div class="icon-size-label">8px · small</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="width:60px;height:60px;background:var(--grad);border-radius:10px;"></div>
+        <div class="icon-size-label">10px · buttons</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="width:60px;height:60px;background:var(--grad);border-radius:14px;"></div>
+        <div class="icon-size-label">14px · icons</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="width:60px;height:60px;background:var(--grad);border-radius:20px;"></div>
+        <div class="icon-size-label">20px · cards</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="width:60px;height:60px;background:var(--grad);border-radius:24px;"></div>
+        <div class="icon-size-label">24px · panels</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="width:60px;height:60px;background:var(--grad);border-radius:30px;"></div>
+        <div class="icon-size-label">100% · avatar</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- DO / DON'T -->
+<section>
+  <div class="section-num">09 — Usage Rules</div>
+  <div class="section-title">Do's &amp; Don'ts</div>
+  <div class="section-sub">Brand consistency rules for applying ToolHive AI's visual identity across screens, slides, and print.</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+    <div style="border-radius:20px;padding:40px;background:rgba(52,168,83,0.06);border:1px solid rgba(52,168,83,0.2);">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;color:#1e6e37;margin-bottom:24px;">✓ DO</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:14px;">
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#34A853;">→</span>Use the logo on dark, light, navy, or gradient backgrounds only</li>
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#34A853;">→</span>Always pair the icon with the wordmark in headers</li>
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#34A853;">→</span>Use Syne for all headings and display text</li>
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#34A853;">→</span>Use DM Mono for all labels, tags, and code contexts</li>
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#34A853;">→</span>Apply gradient left-to-right or top-left-to-bottom-right only</li>
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#34A853;">→</span>Maintain minimum 32px clear space around the logo</li>
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#34A853;">→</span>Use hexagonal motifs in backgrounds at low opacity (≤6%)</li>
+      </ul>
+    </div>
+    <div style="border-radius:20px;padding:40px;background:rgba(234,67,53,0.06);border:1px solid rgba(234,67,53,0.2);">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;color:#a32d2d;margin-bottom:24px;">✗ DON'T</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:14px;">
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#EA4335;">×</span>Never stretch or distort the hexagonal icon</li>
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#EA4335;">×</span>Never use the gradient on busy photographic backgrounds</li>
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#EA4335;">×</span>Never mix Syne with system fonts (Arial, Inter, Roboto)</li>
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#EA4335;">×</span>Never rotate the gradient to diagonal 45° right</li>
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#EA4335;">×</span>Never use colors outside the approved palette</li>
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#EA4335;">×</span>Never place white text on the cream (#E5E5BE) background</li>
+        <li style="font-size:14px;color:#2A3A5C;padding-left:20px;position:relative;"><span style="position:absolute;left:0;color:#EA4335;">×</span>Never add drop shadows or glow effects to the logo</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>
+    <div class="footer-logo">ToolHive AI</div>
+    <div class="footer-tagline">Modular GenAI Tools Library — Brand Identity System v1.0</div>
+  </div>
+  <div style="display:flex;gap:48px;flex-wrap:wrap;justify-content:center;">
+    <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px;">Primary</div><div style="font-family:'DM Mono',monospace;font-size:13px;color:rgba(229,229,190,0.6);">#003973</div></div>
+    <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px;">Accent</div><div style="font-family:'DM Mono',monospace;font-size:13px;color:rgba(229,229,190,0.6);">#7AB1E3</div></div>
+    <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px;">Warm Neutral</div><div style="font-family:'DM Mono',monospace;font-size:13px;color:rgba(229,229,190,0.6);">#E5E5BE</div></div>
+    <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px;">Display</div><div style="font-family:'DM Mono',monospace;font-size:13px;color:rgba(229,229,190,0.6);">Syne 800</div></div>
+    <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px;">Body</div><div style="font-family:'DM Mono',monospace;font-size:13px;color:rgba(229,229,190,0.6);">DM Sans 300–500</div></div>
+    <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px;">Mono</div><div style="font-family:'DM Mono',monospace;font-size:13px;color:rgba(229,229,190,0.6);">DM Mono</div></div>
+  </div>
+  <div class="footer-meta">© ToolHive AI · Capstone Prototype · All brand assets reserved</div>
+</div>
+
+</body>
+</html>

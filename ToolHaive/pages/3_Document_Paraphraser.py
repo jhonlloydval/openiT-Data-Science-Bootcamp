@@ -4,7 +4,7 @@ Assigned to: Iris
 """
 
 import streamlit as st
-from utils.ui import inject_styles, render_navbar, render_tool_header, close_tool_body
+from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body_container
 from utils.ollama_client import chat
 
 st.set_page_config(
@@ -28,24 +28,24 @@ SYSTEM_PROMPTS = {
     "Simplified": "You are a professional editor. Rewrite the submitted text in simple, clear language that anyone can understand — use short sentences and common words. Preserve all original meaning exactly. Return ONLY the rewritten text, no commentary.",
 }
 
-tone = st.selectbox("Select output tone", list(SYSTEM_PROMPTS.keys()))
-user_text = st.text_area(
-    label            = "Your text",
-    label_visibility = "collapsed",
-    placeholder      = "Paste the text you want to paraphrase…",
-    height           = 260,
-)
+with tool_body_container():
+    tone = st.selectbox("Select output tone", list(SYSTEM_PROMPTS.keys()))
+    user_text = st.text_area(
+        label            = "Your text",
+        label_visibility = "collapsed",
+        placeholder      = "Paste the text you want to paraphrase…",
+        height           = 260,
+    )
 
-if st.button("Paraphrase →", use_container_width=False) and user_text.strip():
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPTS[tone]},
-        {"role": "user",   "content": user_text},
-    ]
-    with st.spinner(f"Rewriting in {tone} tone…"):
-        result = chat(messages)
-    st.markdown(f"**{tone} version:**")
-    st.markdown(result)
-elif st.button and not user_text.strip():
-    pass
-
-close_tool_body()
+    run = st.button("Paraphrase →", use_container_width=False)
+    if run and user_text.strip():
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPTS[tone]},
+            {"role": "user",   "content": user_text},
+        ]
+        with st.spinner(f"Rewriting in {tone} tone…"):
+            result = chat(messages)
+        st.markdown(f"**{tone} version:**")
+        st.markdown(result)
+    elif run:
+        st.warning("Please paste some text first.")

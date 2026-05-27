@@ -9,7 +9,7 @@ Assigned to: Iris
 """
 
 import streamlit as st
-from utils.ui import inject_styles, render_navbar, render_tool_header, close_tool_body
+from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body_container
 from utils.ollama_client import chat
 
 st.set_page_config(
@@ -61,9 +61,21 @@ if "ic_messages" not in st.session_state:
     ]
 
 # ── Render chat history ───────────────────────────────────────────────────────
-for msg in st.session_state.ic_messages[1:]:   # skip system
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+with tool_body_container():
+    for msg in st.session_state.ic_messages[1:]:   # skip system
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
+
+    if len(st.session_state.ic_messages) == 1:
+        st.info("Start by telling the coach what role or industry you are preparing for.")
+
+    # ── Reset button ──────────────────────────────────────────────────────────
+    if len(st.session_state.ic_messages) > 1:
+        if st.button("Start New Interview"):
+            st.session_state.ic_messages = [
+                {"role": "system", "content": SYSTEM_PROMPT}
+            ]
+            st.rerun()
 
 # ── Handle new input ──────────────────────────────────────────────────────────
 if prompt := st.chat_input("Type your answer or ask a question…"):
@@ -75,13 +87,3 @@ if prompt := st.chat_input("Type your answer or ask a question…"):
             reply = chat(st.session_state.ic_messages)
         st.markdown(reply)
     st.session_state.ic_messages.append({"role": "assistant", "content": reply})
-
-# ── Reset button ──────────────────────────────────────────────────────────────
-if len(st.session_state.ic_messages) > 1:
-    if st.button("🔄 Start New Interview"):
-        st.session_state.ic_messages = [
-            {"role": "system", "content": SYSTEM_PROMPT}
-        ]
-        st.rerun()
-
-close_tool_body()
