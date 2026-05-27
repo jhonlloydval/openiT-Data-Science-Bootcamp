@@ -4,32 +4,8 @@ import streamlit as st
 from utils.ui import inject_styles, render_html, render_navbar
 from utils.ollama_client import MODEL_OPTIONS
 
-# ── Import BUILTIN_TOOLS to compute counts dynamically ────────────────────────
-# We import directly from the module so that adding a new tool to 0_Tools_Library.py
-# automatically updates every count on the landing page.
-import importlib, sys, os, types
-
-def _load_builtin_tools():
-    """Import BUILTIN_TOOLS without executing Streamlit UI calls."""
-    src_path = os.path.join(os.path.dirname(__file__), "pages", "0_Tools_Library.py")
-    spec = importlib.util.spec_from_file_location("_tools_lib", src_path)
-    mod  = importlib.util.module_from_spec(spec)
-    # Stub out streamlit so the page-level UI code doesn't execute
-    _st_stub = types.ModuleType("streamlit")
-    for attr in dir(st):
-        setattr(_st_stub, attr, lambda *a, **kw: None)
-    _st_stub.session_state = {}
-    _st_stub.set_page_config = lambda **kw: None
-    sys.modules["streamlit"] = _st_stub
-    try:
-        spec.loader.exec_module(mod)
-    except Exception:
-        pass
-    finally:
-        sys.modules["streamlit"] = st  # restore real streamlit
-    return getattr(mod, "BUILTIN_TOOLS", [])
-
-BUILTIN_TOOLS = _load_builtin_tools()
+# ── Import BUILTIN_TOOLS from shared data module (single source of truth) ─────
+from utils.tools_data import BUILTIN_TOOLS
 
 # ── Derived counts (single source of truth) ───────────────────────────────────
 NUM_TOOLS        = len(BUILTIN_TOOLS)

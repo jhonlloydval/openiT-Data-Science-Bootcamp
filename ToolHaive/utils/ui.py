@@ -68,16 +68,21 @@ a { text-decoration: none; }
   --font-mono:   'DM Mono', monospace;
 }
 
-[data-testid="stSidebar"]        { display: none !important; }
-[data-testid="collapsedControl"] { display: none !important; }
-#MainMenu                         { visibility: hidden !important; }
-footer                            { visibility: hidden !important; }
-header                            { visibility: hidden !important; }
-[data-testid="stToolbar"]         { display: none !important; }
-[data-testid="stDecoration"]      { display: none !important; }
+[data-testid="stSidebar"]              { display: none !important; }
+[data-testid="collapsedControl"]       { display: none !important; }
+#MainMenu                              { visibility: hidden !important; }
+footer                                 { visibility: hidden !important; }
+header                                 { visibility: hidden !important; }
+[data-testid="stToolbar"]              { display: none !important; }
+[data-testid="stDecoration"]           { display: none !important; }
+[data-testid="stHeader"]               { display: none !important; }
+[data-testid="stStatusWidget"]         { display: none !important; }
 
-.block-container { padding: 0 !important; max-width: 100% !important; }
-.stApp { font-family: var(--font-body) !important; background: var(--cream-light) !important; }
+.block-container                       { padding: 0 !important; max-width: 100% !important; }
+[data-testid="stMainBlockContainer"]   { padding: 0 !important; max-width: 100% !important; background: transparent !important; }
+[data-testid="stMain"]                 { background: transparent !important; }
+[data-testid="stVerticalBlock"]        { gap: 0 !important; }
+.stApp { font-family: var(--font-body) !important; background: var(--ink) !important; }
 
 /* ── Navbar ── */
 .th-nav {
@@ -124,7 +129,7 @@ header                            { visibility: hidden !important; }
 }
 .th-nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
 
-.th-page { padding-top: 64px; min-height: 100vh; }
+.th-page { padding-top: 64px; min-height: 100vh; background: var(--ink); }
 
 /* ── LANDING: Hero ── */
 .th-hero {
@@ -571,8 +576,10 @@ def inject_styles():
 
 def render_navbar(active: str = "home"):
     """Render the fixed top navbar."""
-    home_active = 'active' if active == 'home' else ''
-    dash_active = 'active' if active == 'dashboard' else ''
+    home_active    = 'active' if active == 'home' else ''
+    dash_active    = 'active' if active == 'dashboard' else ''
+    about_active   = 'active' if active == 'about' else ''
+    sources_active = 'active' if active == 'sources' else ''
 
     render_html(f"""
     <nav class="th-nav">
@@ -583,9 +590,10 @@ def render_navbar(active: str = "home"):
         <span class="th-nav-wordmark">ToolHive AI</span>
       </a>
       <div class="th-nav-links">
-        <a class="th-nav-link {home_active}" href="/" target="_self">Home</a>
-        <a class="th-nav-link {dash_active}" href="/Tools_Library" target="_self">Tools Library</a>
-        <a class="th-nav-link" href="/#tools-preview" target="_self">About</a>
+        <a class=\"th-nav-link {home_active}\" href=\"/\" target=\"_self\">Home</a>
+        <a class=\"th-nav-link {dash_active}\" href=\"/Tools_Library\" target=\"_self\">Tools Library</a>
+        <a class=\"th-nav-link {about_active}\" href=\"/about\" target=\"_self\">About</a>
+        <a class=\"th-nav-link {sources_active}\" href=\"/sources\" target=\"_self\">Sources</a>
       </div>
       <a class="th-nav-cta" href="/Tools_Library" target="_self">Launch a Tool →</a>
     </nav>
