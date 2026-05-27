@@ -27,38 +27,77 @@ render_tool_header(
 )
 
 # ── System prompt ─────────────────────────────────────────────────────────────
-SYSTEM_PROMPT = """You are a professional interviewer with expertise across multiple industries.
-Your job is to conduct a realistic mock interview with the user.
+SYSTEM_PROMPT = """You are ToolHive's Interview Coach, a realistic and supportive mock interviewer.
 
-Rules:
-- Ask exactly ONE interview question at a time. Never ask two questions together.
-- After the user responds, evaluate their answer on: Clarity, Relevance, and Depth.
-- Give a score out of 10 and structured feedback.
+Primary goal:
+Help the user practice for a specific role, industry, interview stage, or skill area.
+
+Conversation phases:
+1. Intake
+- If the user has not provided a target role, ask for it before starting the interview.
+- Useful context includes role/title, experience level, industry or company type, interview type, skills/topics to practice, and areas where the user wants feedback.
+- If the user gives partial context, make reasonable assumptions and begin. Do not demand every detail.
+- Do not score or critique intake/context messages.
+
+2. Mock interview
+- Ask exactly one interview question at a time.
+- Adapt questions to the user's role, experience level, and requested focus.
+- Mix behavioral, situational, technical, and role-specific questions when appropriate.
+- Wait for the user's answer before evaluating.
+
+3. Coaching after each answer
+- Evaluate Clarity, Relevance, Depth, and Role Fit.
+- Be specific: reference the user's answer, name what worked, and name one or two improvements.
+- Give a stronger sample answer that preserves the user's intent without inventing fake credentials.
 - Then ask the next interview question.
 
-Output format for each evaluation:
+Output rules:
+- When starting from intake context, reply with:
+**Interview Setup**
+[One sentence summarizing the role, level, and focus you will use.]
+
+**Question 1**
+[One clear interview question.]
+
+- After an interview answer, reply with:
 **Evaluation**
 - Clarity: X/10
 - Relevance: X/10
 - Depth: X/10
+- Role Fit: X/10
 - Overall: X/10
 
 **Feedback**
-[2-3 sentences on what was good and what can improve]
+[2-4 concise sentences.]
 
 **Improved Sample Answer**
-[A stronger version of their answer in 2-3 sentences]
+[2-4 interview-ready sentences.]
 
----
+**Next Question**
+[One clear interview question.]
 
-Then ask the next question. Start by warmly greeting the user and asking what role/industry
-they are preparing for, then immediately ask your first interview question."""
+Tone:
+- Professional, encouraging, practical, and concise.
+- If the user asks for strategy, examples, or a different focus, help briefly and continue the interview flow."""
+
+STARTER_MESSAGE = """Hi, I am your Interview Coach. Tell me what interview you are preparing for, and I will set up a focused mock interview before asking the first question.
+
+You can keep it simple:
+`Junior Data Analyst internship, beginner, SQL + behavioral questions`
+
+Helpful context: role, level, industry/company type, interview type, topics to practice, and anything you want feedback on."""
+
+
+def new_interview_messages() -> list[dict]:
+    """Create a fresh interview chat with an in-context opening message."""
+    return [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "assistant", "content": STARTER_MESSAGE},
+    ]
 
 # ── Session state ─────────────────────────────────────────────────────────────
 if "ic_messages" not in st.session_state:
-    st.session_state.ic_messages = [
-        {"role": "system", "content": SYSTEM_PROMPT}
-    ]
+    st.session_state.ic_messages = new_interview_messages()
 
 # ── Render chat history ───────────────────────────────────────────────────────
 with tool_body_container():
@@ -66,19 +105,21 @@ with tool_body_container():
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-    if len(st.session_state.ic_messages) == 1:
-        st.info("Start by telling the coach what role or industry you are preparing for.")
-
     # ── Reset button ──────────────────────────────────────────────────────────
-    if len(st.session_state.ic_messages) > 1:
+    if any(msg["role"] == "user" for msg in st.session_state.ic_messages):
         if st.button("Start New Interview"):
-            st.session_state.ic_messages = [
-                {"role": "system", "content": SYSTEM_PROMPT}
-            ]
+            st.session_state.ic_messages = new_interview_messages()
             st.rerun()
 
 # ── Handle new input ──────────────────────────────────────────────────────────
-if prompt := st.chat_input("Type your answer or ask a question…"):
+has_user_context = any(msg["role"] == "user" for msg in st.session_state.ic_messages)
+input_placeholder = (
+    "Tell me your target role, level, and interview type..."
+    if not has_user_context
+    else "Type your interview answer or ask for coaching..."
+)
+
+if prompt := st.chat_input(input_placeholder):
     st.session_state.ic_messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
@@ -87,3 +128,4 @@ if prompt := st.chat_input("Type your answer or ask a question…"):
             reply = chat(st.session_state.ic_messages)
         st.markdown(reply)
     st.session_state.ic_messages.append({"role": "assistant", "content": reply})
+    st.rerun()
