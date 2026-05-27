@@ -58,7 +58,7 @@ render_html("""
 }
 .haive-empty-title {
   font-family: var(--font-display); font-size: 28px; font-weight: 800;
-  color: var(--ink); letter-spacing: -0.02em; line-height: 1.1;
+  color: var(--ink); letter-spacing: 0; line-height: 1.1;
 }
 .haive-empty-sub {
   color: var(--ink-muted); font-size: 14px; line-height: 1.7;

@@ -63,6 +63,7 @@ a { text-decoration: none; }
   --white:       #FFFFFF;
   --grad:        linear-gradient(90deg,#003973 0%,#0056A3 40%,#7AB1E3 75%,#E5E5BE 100%);
   --grad-135:    linear-gradient(135deg,#003973 0%,#0056A3 40%,#7AB1E3 75%,#E5E5BE 100%);
+  --grad-on-dark:linear-gradient(90deg,#2D8EEB 0%,#7AB1E3 56%,#E5E5BE 100%);
   --font-display:'Syne', sans-serif;
   --font-body:   'DM Sans', sans-serif;
   --font-mono:   'DM Mono', monospace;
@@ -105,7 +106,7 @@ header                                 { visibility: hidden !important; }
 .th-nav-hex svg { width: 16px; height: 16px; fill: white; }
 .th-nav-wordmark {
   font-family: var(--font-display); font-size: 20px; font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   background: var(--grad); -webkit-background-clip: text;
   -webkit-text-fill-color: transparent; background-clip: text;
 }
@@ -168,8 +169,8 @@ header                                 { visibility: hidden !important; }
 .th-hero-hex svg { width: 28px; height: 28px; fill: white; }
 .th-hero-wordmark {
   font-family: var(--font-display); font-size: clamp(48px,8vw,80px); font-weight: 800;
-  letter-spacing: -0.03em; line-height: 1;
-  background: var(--grad); -webkit-background-clip: text;
+  letter-spacing: 0; line-height: 1;
+  background: var(--grad-on-dark); -webkit-background-clip: text;
   -webkit-text-fill-color: transparent; background-clip: text;
 }
 .th-hero-tagline {
@@ -199,17 +200,17 @@ header                                 { visibility: hidden !important; }
 .th-hero-chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .th-chip {
   background: rgba(255,255,255,0.05); border: 1px solid rgba(122,177,227,0.2);
-  border-radius: 8px; padding: 7px 16px; display: inline-flex; align-items: center;
-  gap: 8px; transition: border-color 0.2s;
+  border-radius: 999px; padding: 8px 18px; display: inline-flex; align-items: center;
+  gap: 8px; transition: border-color 0.2s, background 0.2s;
 }
-.th-chip:hover { border-color: rgba(122,177,227,0.45); }
+.th-chip:hover { border-color: rgba(122,177,227,0.45); background: rgba(122,177,227,0.07); }
 .th-chip svg {
-  width: 14px; height: 14px; stroke: var(--sky); fill: none;
+  width: 13px; height: 13px; stroke: var(--sky); fill: none;
   stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0;
 }
 .th-chip span {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
-  text-transform: uppercase; color: rgba(229,229,190,0.55);
+  text-transform: uppercase; color: rgba(229,229,190,0.6);
 }
 
 /* ── LANDING: Preview strip ── */
@@ -224,7 +225,7 @@ header                                 { visibility: hidden !important; }
 }
 .th-preview-card {
   background: rgba(255,255,255,0.04); border: 1px solid rgba(122,177,227,0.12);
-  border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column;
+  border-radius: 20px; padding: 22px 20px; display: flex; flex-direction: column;
   gap: 10px; cursor: pointer; text-decoration: none;
   transition: background 0.2s, border-color 0.2s, transform 0.2s;
 }
@@ -233,7 +234,7 @@ header                                 { visibility: hidden !important; }
   transform: translateY(-3px);
 }
 .th-preview-icon {
-  width: 40px; height: 40px; border-radius: 10px;
+  width: 40px; height: 40px; border-radius: 12px;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 .th-preview-icon svg {
@@ -253,7 +254,7 @@ header                                 { visibility: hidden !important; }
 }
 .th-stat-num {
   font-family: var(--font-display); font-size: 36px; font-weight: 800;
-  letter-spacing: -0.02em; background: var(--grad);
+  letter-spacing: 0; background: var(--grad);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text; text-align: center;
 }
@@ -286,7 +287,7 @@ header                                 { visibility: hidden !important; }
 }
 .th-dash-title {
   font-family: var(--font-display); font-size: clamp(24px,3vw,36px); font-weight: 800;
-  letter-spacing: -0.02em; background: var(--grad);
+  letter-spacing: 0; background: var(--grad-on-dark);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .th-dash-sub { font-size: 14px; color: rgba(229,229,190,0.45); margin-top: 6px; }
@@ -370,16 +371,16 @@ header                                 { visibility: hidden !important; }
 /* ── Tool card ── */
 .th-tool-card {
   background: white; border: 1px solid rgba(0,56,115,0.1);
-  border-radius: 20px; overflow: hidden; display: flex; flex-direction: column;
+  border-radius: 24px; overflow: hidden; display: flex; flex-direction: column;
   cursor: pointer; color: inherit; text-decoration: none;
   transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
 }
 .th-tool-card:hover {
-  transform: translateY(-6px); box-shadow: 0 20px 56px rgba(0,56,115,0.14);
-  border-color: rgba(0,86,163,0.2);
+  transform: translateY(-6px); box-shadow: 0 24px 64px rgba(0,56,115,0.16);
+  border-color: rgba(0,86,163,0.22);
 }
 .th-card-cover {
-  height: 120px; position: relative; overflow: hidden;
+  height: 128px; position: relative; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
 }
 .th-card-cover-hex {
@@ -391,8 +392,8 @@ header                                 { visibility: hidden !important; }
   background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.32) 100%);
 }
 .th-card-cover-icon {
-  position: relative; z-index: 1; width: 52px; height: 52px;
-  background: rgba(255,255,255,0.15); border-radius: 14px;
+  position: relative; z-index: 1; width: 54px; height: 54px;
+  background: rgba(255,255,255,0.15); border-radius: 16px;
   display: flex; align-items: center; justify-content: center;
   backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2);
 }
@@ -409,22 +410,22 @@ header                                 { visibility: hidden !important; }
 .cv-7 { background: linear-gradient(135deg,#3d2200 0%,#5a3300 45%,#8a5200 100%); }
 .cv-8 { background: linear-gradient(135deg,#002840 0%,#003d5c 45%,#005580 100%); }
 
-.th-card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+.th-card-body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
 .th-card-top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .th-card-cat-tag {
   font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--navy-mid);
-  background: rgba(0,86,163,0.08); padding: 3px 10px; border-radius: 100px; white-space: nowrap;
+  background: rgba(0,86,163,0.08); padding: 4px 12px; border-radius: 999px; white-space: nowrap;
 }
 .th-card-turn-badge {
   font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.06em;
-  padding: 3px 9px; border-radius: 100px; white-space: nowrap;
+  padding: 4px 10px; border-radius: 999px; white-space: nowrap;
 }
 .badge-multi  { background: rgba(122,177,227,0.15); color: #1a5d82; }
 .badge-single { background: rgba(200,200,154,0.35); color: #5a5a28; }
 .th-card-name {
   font-family: var(--font-display); font-size: 15px; font-weight: 700;
-  color: var(--ink); letter-spacing: -0.01em; line-height: 1.2;
+  color: var(--ink); letter-spacing: 0; line-height: 1.2;
 }
 .th-card-user  { font-size: 11px; color: var(--sky); font-weight: 400; margin-top: -4px; }
 .th-card-desc  { font-size: 11.5px; color: var(--ink-muted); line-height: 1.6; flex: 1; }
@@ -435,7 +436,7 @@ header                                 { visibility: hidden !important; }
 .th-card-launch {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--navy-mid); background: rgba(0,86,163,0.07);
-  border: none; padding: 7px 16px; border-radius: 7px; cursor: pointer;
+  border: none; padding: 8px 18px; border-radius: 999px; cursor: pointer;
   display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
   transition: background 0.15s, color 0.15s;
 }
@@ -447,14 +448,14 @@ header                                 { visibility: hidden !important; }
 
 .th-card-add {
   background: transparent; border: 2px dashed rgba(0,86,163,0.2);
-  border-radius: 20px; display: flex; flex-direction: column;
+  border-radius: 24px; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 14px; padding: 40px 24px; cursor: pointer; text-align: center; text-decoration: none;
   min-height: 280px; transition: border-color 0.2s, background 0.2s;
 }
 .th-card-add:hover { border-color: rgba(0,86,163,0.45); background: rgba(0,86,163,0.03); }
 .th-card-add-icon {
-  width: 52px; height: 52px; border-radius: 14px;
+  width: 52px; height: 52px; border-radius: 16px;
   border: 2px dashed rgba(0,86,163,0.25);
   display: flex; align-items: center; justify-content: center;
 }
@@ -476,7 +477,7 @@ header                                 { visibility: hidden !important; }
   position: absolute; inset: 0; opacity: 0.03;
   background-image: HEX_PATTERN_SM_PLACEHOLDER; background-size: 70px 80px; pointer-events: none;
 }
-.th-tool-header-inner { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+.th-tool-header-inner { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; }
 .th-tool-back {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
   color: rgba(229,229,190,0.4); background: none; border: none; cursor: pointer;
@@ -485,38 +486,65 @@ header                                 { visibility: hidden !important; }
 }
 .th-tool-back:hover { color: rgba(229,229,190,0.8); }
 .th-tool-page-title {
-  font-family: var(--font-display); font-size: 28px; font-weight: 800; letter-spacing: -0.02em;
-  background: var(--grad); -webkit-background-clip: text;
+  font-family: var(--font-display); font-size: 28px; font-weight: 800; letter-spacing: 0;
+  background: var(--grad-on-dark); -webkit-background-clip: text;
   -webkit-text-fill-color: transparent; background-clip: text;
 }
 .th-tool-page-sub { font-size: 13px; color: rgba(229,229,190,0.4); margin-top: 4px; }
 .th-tool-body {
-  max-width: 900px; margin: 0 auto; padding: 32px 48px 64px;
+  width: 100%; max-width: 1180px; margin: 0 auto; padding: 32px 48px 72px;
   background: var(--cream-light); min-height: calc(100vh - 200px);
 }
 .st-key-tool-body {
-  max-width: 900px; margin: 0 auto; padding: 32px 48px 64px;
+  width: 100%; max-width: 1180px; margin: 0 auto; padding: 32px 48px 72px;
   background: var(--cream-light); min-height: calc(100vh - 200px);
 }
-.th-tool-body .stTextArea textarea, .st-key-tool-body textarea {
+.th-tool-body .stTextArea textarea, .st-key-tool-body textarea,
+.th-tool-body .stTextInput input, .st-key-tool-body .stTextInput input,
+.th-tool-body .stNumberInput input, .st-key-tool-body .stNumberInput input,
+.th-tool-body [data-baseweb="select"] > div,
+.st-key-tool-body [data-baseweb="select"] > div {
   border: 1.5px solid rgba(0,56,115,0.15) !important; border-radius: 10px !important;
   font-family: var(--font-body) !important; font-size: 14px !important;
   color: var(--ink) !important; background: white !important;
+  min-height: 42px !important;
 }
-.th-tool-body .stTextArea textarea:focus, .st-key-tool-body textarea:focus {
+.th-tool-body .stTextArea textarea:focus, .st-key-tool-body textarea:focus,
+.th-tool-body .stTextInput input:focus, .st-key-tool-body .stTextInput input:focus,
+.th-tool-body .stNumberInput input:focus, .st-key-tool-body .stNumberInput input:focus {
   border-color: var(--navy-mid) !important; box-shadow: 0 0 0 3px rgba(0,86,163,0.08) !important;
 }
 .th-tool-body .stButton button, .st-key-tool-body .stButton button {
   background: linear-gradient(90deg,#003973,#0056A3) !important;
   color: white !important; border: none !important; border-radius: 9px !important;
   font-family: var(--font-body) !important; font-size: 14px !important;
-  font-weight: 500 !important; padding: 10px 28px !important;
+  font-weight: 500 !important; padding: 10px 20px !important;
+  min-height: 42px !important; white-space: normal !important;
+  line-height: 1.25 !important; word-break: normal !important;
 }
 .th-tool-body .stButton button:hover, .st-key-tool-body .stButton button:hover { opacity: 0.88 !important; }
+.th-tool-body label, .st-key-tool-body label {
+  color: var(--ink-mid) !important;
+  line-height: 1.35 !important;
+}
+.th-tool-body [data-testid="stHorizontalBlock"], .st-key-tool-body [data-testid="stHorizontalBlock"] {
+  gap: 1rem !important;
+}
+.th-tool-body [data-testid="stForm"], .st-key-tool-body [data-testid="stForm"] {
+  border: 1px solid rgba(0,56,115,0.08) !important;
+  border-radius: 14px !important;
+  padding: 16px !important;
+  background: rgba(255,255,255,0.54) !important;
+}
+.th-tool-body [data-testid="stExpander"], .st-key-tool-body [data-testid="stExpander"] {
+  border-color: rgba(0,56,115,0.12) !important;
+  border-radius: 14px !important;
+  background: rgba(255,255,255,0.66) !important;
+}
 
 .th-output-box {
   background: white; border: 1px solid rgba(0,56,115,0.1);
-  border-radius: 14px; padding: 24px 28px; margin-top: 20px;
+  border-radius: 18px; padding: 24px 28px; margin-top: 20px;
 }
 .th-output-label {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
@@ -540,6 +568,24 @@ header                                 { visibility: hidden !important; }
 .th-nav-link, .th-nav-link:visited { color: rgba(229,229,190,0.5) !important; }
 .th-nav-link.active, .th-nav-link.active:visited { color: #E5E5BE !important; }
 .th-btn-ghost, .th-btn-ghost:visited { color: rgba(229,229,190,0.7) !important; }
+@media (max-width: 900px) {
+  .th-nav { padding: 0 20px; }
+  .th-nav-links { gap: 0; margin-right: 10px; }
+  .th-nav-link { padding: 8px 9px; font-size: 10px; }
+  .th-nav-cta { display: none; }
+  .th-tool-header { padding: 28px 24px 24px; }
+  .th-tool-body, .st-key-tool-body { padding: 28px 24px 64px; }
+}
+@media (max-width: 620px) {
+  .th-nav { height: auto; min-height: 64px; padding: 10px 14px; flex-wrap: wrap; }
+  .th-nav-logo { width: 100%; margin-right: 0; justify-content: center; }
+  .th-nav-links { width: 100%; justify-content: center; flex-wrap: wrap; margin: 8px 0 0; }
+  .th-page { padding-top: 106px; }
+  .th-toolbar, .st-key-tool-toolbar { top: 106px; padding: 14px 18px; }
+  .th-tool-header { padding: 34px 20px 22px; }
+  .th-tool-body, .st-key-tool-body { padding: 24px 18px 56px; }
+  .th-tool-page-title { font-size: 24px; }
+}
 </style>
 """
 

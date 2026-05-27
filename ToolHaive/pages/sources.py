@@ -1,137 +1,324 @@
-"""pages/14_Sources.py — ToolHive AI · Sources & Document Preparation."""
+"""pages/sources.py - ToolHive AI sources page."""
 
-import os
+from pathlib import Path
+
 import streamlit as st
-from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body_container
+
+from utils.ui import HEX_PATTERN_SM, escape_html, inject_styles, render_html, render_navbar
+
 
 st.set_page_config(
-    page_title="Sources — ToolHive AI",
-    page_icon="📚",
+    page_title="Sources - ToolHive AI",
+    page_icon="TH",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
 inject_styles()
 render_navbar(active="sources")
-render_tool_header(
-    title="Sources & Document Preparation",
-    subtitle="Document sources, preparation process, and how they shaped ToolHive AI",
-    cover_class="cv-2",
+
+
+def file_rows() -> str:
+    files_dir = Path(__file__).resolve().parent.parent / "files"
+    if not files_dir.exists():
+        return """
+        <div class="src-row">
+          <div class="src-row-title">Project files</div>
+          <div class="src-row-copy">The files directory was not found in this workspace.</div>
+        </div>
+        """
+
+    rows = []
+    for path in sorted(item for item in files_dir.iterdir() if not item.name.startswith(".")):
+        size_kb = path.stat().st_size / 1024
+        rows.append(
+            f"""
+            <div class="src-row">
+              <div class="src-row-title">{escape_html(path.name)}</div>
+              <div class="src-row-copy">{size_kb:.1f} KB stored in the project files directory.</div>
+            </div>
+            """
+        )
+
+    if not rows:
+        return """
+        <div class="src-row">
+          <div class="src-row-title">Project files</div>
+          <div class="src-row-copy">No source files were found in the files directory.</div>
+        </div>
+        """
+    return "".join(rows)
+
+
+render_html(
+    f"""
+<style>
+.sources-page {{
+  padding-top: 64px;
+  min-height: 100vh;
+  background: var(--cream-light);
+}}
+.src-hero {{
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  padding: 72px 48px 60px;
+}}
+.src-hero::before {{
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: {HEX_PATTERN_SM};
+  background-size: 70px 80px;
+}}
+.src-hero::after {{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 700px 340px at 12% 30%, rgba(0,86,163,0.45), transparent 70%),
+    radial-gradient(ellipse 520px 320px at 86% 30%, rgba(122,177,227,0.14), transparent 68%);
+}}
+.src-inner {{
+  position: relative;
+  z-index: 1;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}}
+.src-kicker {{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sky);
+  margin-bottom: 14px;
+}}
+.src-title {{
+  font-family: var(--font-display);
+  font-size: clamp(38px, 6vw, 68px);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0;
+  background: var(--grad-on-dark);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}}
+.src-sub {{
+  max-width: 760px;
+  margin-top: 18px;
+  color: rgba(229,229,190,0.68);
+  font-size: 17px;
+  line-height: 1.75;
+}}
+.src-band {{
+  padding: 54px 48px;
+  background: var(--cream-light);
+}}
+.src-band.alt {{
+  background: white;
+}}
+.src-section-head {{
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 28px;
+}}
+.src-section-label {{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--navy-mid);
+}}
+.src-section-title {{
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--ink);
+}}
+.src-section-copy {{
+  color: var(--ink-muted);
+  font-size: 15px;
+  line-height: 1.8;
+}}
+.src-grid {{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}}
+.src-source {{
+  border-top: 2px solid rgba(0,86,163,0.24);
+  padding: 18px 4px 4px;
+}}
+.src-source-title {{
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 8px;
+}}
+.src-source-copy {{
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}}
+.src-rows {{
+  border-top: 1px solid rgba(0,56,115,0.12);
+}}
+.src-row {{
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 28px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(0,56,115,0.10);
+}}
+.src-row-title {{
+  font-weight: 800;
+  color: var(--ink);
+  word-break: break-word;
+}}
+.src-row-copy {{
+  color: var(--ink-muted);
+  line-height: 1.7;
+}}
+.src-process {{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}}
+.src-step {{
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(0,56,115,0.10);
+  border-radius: 14px;
+  padding: 18px;
+}}
+.src-step-num {{
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--navy-mid);
+  margin-bottom: 10px;
+}}
+.src-step-copy {{
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}}
+@media (max-width: 900px) {{
+  .sources-page {{ padding-top: 64px; }}
+  .src-hero, .src-band {{ padding-left: 24px; padding-right: 24px; }}
+  .src-section-head {{ grid-template-columns: 1fr; gap: 14px; }}
+  .src-grid, .src-process {{ grid-template-columns: repeat(2, minmax(0, 1fr)); }}
+}}
+@media (max-width: 620px) {{
+  .sources-page {{ padding-top: 106px; }}
+  .src-grid, .src-process, .src-row {{ grid-template-columns: 1fr; }}
+  .src-row {{ gap: 6px; }}
+}}
+</style>
+<div class="sources-page">
+  <section class="src-hero">
+    <div class="src-inner">
+      <div class="src-kicker">Project Evidence And Preparation</div>
+      <div class="src-title">Sources</div>
+      <div class="src-sub">
+        The documents and references behind ToolHive's product structure,
+        visual system, model wrapper, and prompt boundaries.
+      </div>
+    </div>
+  </section>
+
+  <section class="src-band">
+    <div class="src-inner">
+      <div class="src-section-head">
+        <div>
+          <div class="src-section-label">Source Set</div>
+          <div class="src-section-title">What informed the build.</div>
+        </div>
+        <div class="src-section-copy">
+          ToolHive was assembled from a small, deliberate source set: the
+          project paper, the brand guide, model/API documentation, and bootcamp
+          lessons on prompt engineering and AI workflow design.
+        </div>
+      </div>
+      <div class="src-grid">
+        <div class="src-source">
+          <div class="src-source-title">ToolHive Paper</div>
+          <div class="src-source-copy">Internal design and architecture document used for the tool taxonomy, workflow framing, and scope boundaries.</div>
+        </div>
+        <div class="src-source">
+          <div class="src-source-title">Brand Guide</div>
+          <div class="src-source-copy">Visual identity reference used for colors, typography, cards, navigation, and the dark blue ToolHive theme.</div>
+        </div>
+        <div class="src-source">
+          <div class="src-source-title">Model Docs And Lessons</div>
+          <div class="src-source-copy">Ollama model/API references and bootcamp materials guided the local model wrapper and prompt-first approach.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="src-band alt">
+    <div class="src-inner">
+      <div class="src-section-head">
+        <div>
+          <div class="src-section-label">Preparation</div>
+          <div class="src-section-title">How sources became app behavior.</div>
+        </div>
+        <div class="src-section-copy">
+          The source documents were manually reviewed and distilled into
+          interface patterns, tool descriptions, shared prompt rules, and
+          scoped system prompts. This keeps the prototype simple and auditable.
+        </div>
+      </div>
+      <div class="src-process">
+        <div class="src-step"><div class="src-step-num">Step 01</div><div class="src-step-copy">Review project and brand documents for product goals, names, colors, and UI direction.</div></div>
+        <div class="src-step"><div class="src-step-num">Step 02</div><div class="src-step-copy">Translate tool ideas into structured app pages with clear input and output expectations.</div></div>
+        <div class="src-step"><div class="src-step-num">Step 03</div><div class="src-step-copy">Encode shared scope rules so each Hive stays inside its intended task area.</div></div>
+        <div class="src-step"><div class="src-step-num">Step 04</div><div class="src-step-copy">Connect pages to the shared local model client and polish the user-facing workflow.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="src-band">
+    <div class="src-inner">
+      <div class="src-section-head">
+        <div>
+          <div class="src-section-label">Files</div>
+          <div class="src-section-title">Project files currently included.</div>
+        </div>
+        <div class="src-section-copy">
+          These are the local files in the project source directory that support
+          the documentation and brand story for the prototype.
+        </div>
+      </div>
+      <div class="src-rows">
+        {file_rows()}
+      </div>
+    </div>
+  </section>
+
+  <section class="src-band alt">
+    <div class="src-inner">
+      <div class="src-section-head">
+        <div>
+          <div class="src-section-label">Data Quality</div>
+          <div class="src-section-title">What the sources do and do not cover.</div>
+        </div>
+        <div class="src-section-copy">
+          The sources explain ToolHive's product and UI design. Individual tool
+          knowledge comes from the local model and the prompts embedded in each
+          page. The app does not browse the web or retrieve from a vector store
+          during normal tool use.
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+"""
 )
-
-with tool_body_container():
-
-    # ── Section 1: What sources were used ─────────────────────────────────────
-    st.markdown("### 📄 Document Sources Used")
-    st.markdown(
-        """
-        The following documents were collected and reviewed during the preparation phase of this project.
-        They served as the primary knowledge base from which the tool architecture, system prompts,
-        and scope boundaries were designed.
-        """
-    )
-
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        st.markdown(
-            """
-            **ToolHive Paper**
-            - **Files:** `ToolHive_Paper.pdf`, `ToolHive_Paper.docx`
-            - **Type:** Internal design and architecture document
-            - **Covers:** System design rationale, tool taxonomy, AI workflow patterns,
-              and the overall product vision for ToolHive AI
-            - **Used for:** Defining the tool categories, naming conventions,
-              and the scope rules encoded into each system prompt
-            """
-        )
-
-    with col2:
-        st.markdown(
-            """
-            **ToolHive Brand Guide**
-            - **File:** `toolhive_brand_guide.html`
-            - **Type:** Visual identity and UI specification document
-            - **Covers:** Color system, typography, component patterns,
-              and layout guidelines for the ToolHive interface
-            - **Used for:** Building the CSS design system in `utils/ui.py`,
-              including the navbar, tool cards, cover classes, and color tokens
-            """
-        )
-
-    with col3:
-        st.markdown(
-            """
-            **Ollama Model Documentation**
-            - **Source:** [ollama.com/library](https://ollama.com/library)
-            - **Type:** External public documentation
-            - **Covers:** Available local models, API interface, and streaming support
-            - **Used for:** Configuring `utils/ollama_client.py`, selecting
-              phi4-mini as the default model, and planning the model selector feature
-            """
-        )
-
-    st.divider()
-
-    # ── Section 2: Preparation process ────────────────────────────────────────
-    st.markdown("### 🔧 Preparation & Ingestion Process")
-    st.markdown(
-        """
-        ToolHive AI uses **prompt-based document distillation** as its ingestion method.
-        Rather than embedding documents into a vector store, the team manually reviewed
-        each source document and extracted the relevant knowledge directly into structured
-        system prompts. This approach was chosen because:
-
-        - It is explainable, auditable, and easy to debug
-        - It works reliably with small local models (phi4-mini, llama3.2)
-        - It fits a 2-day build window without requiring a retrieval pipeline
-
-        The table below maps each document to the part of the app it informed.
-        """
-    )
-
-    st.markdown(
-        """
-        | Source Document | Extracted Into | How It Was Used |
-        |---|---|---|
-        | `ToolHive_Paper.pdf / .docx` | System prompts, tool scope definitions | Reviewed manually; key rules encoded into `scoped_system_prompt()` for each tool |
-        | `toolhive_brand_guide.html` | `utils/ui.py` CSS design system | Parsed visually; color tokens, typography, and layout rules implemented directly |
-        | Ollama model docs | `utils/ollama_client.py` | API endpoint, model names, and payload structure sourced from official docs |
-        | Bootcamp lesson materials | Tool selection and AI workflow design | Informed the choice of prompt engineering over embeddings for the build window |
-        """
-    )
-
-    st.divider()
-
-    # ── Section 3: Source expander (quick reference) ───────────────────────────
-    with st.expander("📂 View source files in this project"):
-        files_dir = os.path.join(os.path.dirname(__file__), "..", "files")
-        if os.path.exists(files_dir):
-            files = [f for f in os.listdir(files_dir) if not f.startswith(".")]
-            if files:
-                for fname in sorted(files):
-                    fpath = os.path.join(files_dir, fname)
-                    size_kb = round(os.path.getsize(fpath) / 1024, 1)
-                    st.markdown(f"- `{fname}` — {size_kb} KB")
-            else:
-                st.info("No files found in /files directory.")
-        else:
-            st.info("/files directory not found.")
-
-    st.divider()
-
-    # ── Section 4: Data quality & limitations note ─────────────────────────────
-    st.markdown("### ⚠️ Data Quality Notes")
-    st.markdown(
-        """
-        - **Coverage:** Sources cover the ToolHive system design and UI only.
-          Individual tool knowledge (e.g. interview coaching, grammar checking)
-          comes from the base model's pre-trained knowledge, not from retrieved documents.
-        - **No real-time data:** ToolHive AI does not connect to the internet.
-          All outputs are based on the local model and the system prompts encoded during preparation.
-        - **No version tracking:** Document sources are not versioned.
-          If the source files are updated, system prompts would need to be manually revised.
-        - **Language:** All source documents are in English.
-          Model outputs in other languages depend on the selected model's multilingual capability.
-        """
-    )

@@ -75,14 +75,14 @@ CATEGORY_OPTIONS = {
 render_html("""
 <style>
 .th-featured-strip {
-  background: var(--cream-light); padding: 26px 48px 4px;
+  background: var(--cream-light); padding: 26px 48px 28px;
 }
 .th-featured-inner {
   max-width: 1300px; margin: 0 auto;
 }
 .th-featured-card {
   display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center;
-  gap: 24px; padding: 28px 30px; border-radius: 18px;
+  gap: 24px; padding: 28px 30px; border-radius: 22px;
   background:
     linear-gradient(135deg,rgba(10,22,40,0.98),rgba(0,57,115,0.94)),
     linear-gradient(90deg,#003973,#0056A3,#7AB1E3);
@@ -100,7 +100,7 @@ render_html("""
 }
 .th-featured-title {
   font-family: var(--font-display); font-size: clamp(28px,4vw,46px);
-  font-weight: 800; letter-spacing: -0.02em; line-height: 1;
+  font-weight: 800; letter-spacing: 0; line-height: 1;
   background: var(--grad); -webkit-background-clip: text;
   -webkit-text-fill-color: transparent; background-clip: text;
 }
@@ -111,13 +111,23 @@ render_html("""
 .th-featured-action {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
   text-transform: uppercase; color: white; background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.18); border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.18); border-radius: 12px;
   padding: 13px 18px; white-space: nowrap;
 }
 @media (max-width: 760px) {
-  .th-featured-strip { padding: 22px 22px 4px; }
+  .th-featured-strip { padding: 22px 22px 24px; }
   .th-featured-card { grid-template-columns: 1fr; padding: 24px; }
   .th-featured-action { width: fit-content; }
+}
+/* Ensure toolbar container has a clear white background and no overlap */
+[data-testid="stVerticalBlock"] > [data-testid="stVerticalBlockBorderWrapper"]:has(.st-key-tool-toolbar) {
+  background: white !important;
+  position: sticky !important;
+  top: 64px !important;
+  z-index: 100 !important;
+}
+div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"] {
+  gap: 0 !important;
 }
 </style>
 """)
@@ -219,17 +229,18 @@ render_html("""
   <div class="th-featured-inner">
     <a class="th-featured-card" href="/haive" target="_self">
       <div class="th-featured-content">
-        <div class="th-featured-label">Featured</div>
+        <div class="th-featured-label">Featured · General Chat</div>
         <div class="th-featured-title">HAIVE</div>
         <div class="th-featured-sub">
           General AI Assistant for open-ended chat, drafting, studying, planning, and problem solving.
           Powered by phi4-mini by default, with a model selector and more models coming soon.
         </div>
       </div>
-      <div class="th-featured-action">Launch HAIVE -></div>
+      <div class="th-featured-action">Launch HAIVE →</div>
     </a>
   </div>
 </div>
+<div style="height:1px;background:rgba(0,56,115,0.09);"></div>
 """)
 
 with st.container(key="tool-toolbar"):
