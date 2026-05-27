@@ -2,7 +2,40 @@
 
 import streamlit as st
 from utils.ui import inject_styles, render_html, render_navbar
+from utils.ollama_client import MODEL_OPTIONS
 
+# ── Import BUILTIN_TOOLS to compute counts dynamically ────────────────────────
+# We import directly from the module so that adding a new tool to 0_Tools_Library.py
+# automatically updates every count on the landing page.
+import importlib, sys, os, types
+
+def _load_builtin_tools():
+    """Import BUILTIN_TOOLS without executing Streamlit UI calls."""
+    src_path = os.path.join(os.path.dirname(__file__), "pages", "0_Tools_Library.py")
+    spec = importlib.util.spec_from_file_location("_tools_lib", src_path)
+    mod  = importlib.util.module_from_spec(spec)
+    # Stub out streamlit so the page-level UI code doesn't execute
+    _st_stub = types.ModuleType("streamlit")
+    for attr in dir(st):
+        setattr(_st_stub, attr, lambda *a, **kw: None)
+    _st_stub.session_state = {}
+    _st_stub.set_page_config = lambda **kw: None
+    sys.modules["streamlit"] = _st_stub
+    try:
+        spec.loader.exec_module(mod)
+    except Exception:
+        pass
+    finally:
+        sys.modules["streamlit"] = st  # restore real streamlit
+    return getattr(mod, "BUILTIN_TOOLS", [])
+
+BUILTIN_TOOLS = _load_builtin_tools()
+
+# ── Derived counts (single source of truth) ───────────────────────────────────
+NUM_TOOLS        = len(BUILTIN_TOOLS)
+NUM_MODELS_TOTAL = len(MODEL_OPTIONS)
+
+# ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="ToolHive AI",
     page_icon="🔷",
@@ -13,7 +46,56 @@ st.set_page_config(
 inject_styles()
 render_navbar(active="home")
 
-render_html("""
+# ── Build preview cards dynamically from BUILTIN_TOOLS ────────────────────────
+# HAIVE (general chat) is always first and links to /haive
+HAIVE_CARD = """
+      <a class=\"th-preview-card\" href=\"/haive\" target=\"_self\">
+        <div class=\"th-preview-icon\" style=\"background:linear-gradient(135deg,#003973,#7AB1E3);\">
+          <svg viewBox=\"0 0 24 24\"><path d=\"M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z\"/><path d=\"M8 9h8M8 13h5\"/></svg>
+        </div>
+        <div class=\"th-preview-name\">HAIVE</div>
+        <div class=\"th-preview-desc\">General AI chat with model selection and open-ended help</div>
+      </a>
+"""
+
+# Gradient pool — cycles for each tool card
+_GRADIENTS = [
+    "linear-gradient(135deg,#002a58,#0056A3)",
+    "linear-gradient(135deg,#003d1f,#1a7a4a)",
+    "linear-gradient(135deg,#1a2a52,#2952a3)",
+    "linear-gradient(135deg,#003d4a,#007a8a)",
+    "linear-gradient(135deg,#2a1a52,#5a35a8)",
+    "linear-gradient(135deg,#003355,#1a6e99)",
+    "linear-gradient(135deg,#3d2200,#8a5200)",
+    "linear-gradient(135deg,#002840,#005580)",
+    "linear-gradient(135deg,#1a3a1a,#2e6b3a)",
+    "linear-gradient(135deg,#3a1a1a,#8a3030)",
+    "linear-gradient(135deg,#2a2a52,#4a4aa0)",
+    "linear-gradient(135deg,#003a3a,#006060)",
+]
+
+def _tool_preview_card(tool: dict, idx: int) -> str:
+    grad = _GRADIENTS[idx % len(_GRADIENTS)]
+    icon = tool.get("icon_svg", "")
+    name = tool.get("name", "")
+    desc = tool.get("desc", "")
+    page = tool.get("page", "/Tools_Library")
+    return f"""
+      <a class="th-preview-card" href="{page}" target="_self">
+        <div class="th-preview-icon" style="background:{grad};">
+          <svg viewBox="0 0 24 24">{icon}</svg>
+        </div>
+        <div class="th-preview-name">{name}</div>
+        <div class="th-preview-desc">{desc[:80]}{'…' if len(desc) > 80 else ''}</div>
+      </a>
+"""
+
+builtin_cards_html = "".join(
+    _tool_preview_card(tool, idx) for idx, tool in enumerate(BUILTIN_TOOLS)
+)
+
+# ── Render page ───────────────────────────────────────────────────────────────
+render_html(f"""
 <div class="th-page" style="background:#0A1628;">
 
   <section class="th-hero">
@@ -54,7 +136,7 @@ render_html("""
       <div class="th-hero-chips">
         <div class="th-chip">
           <svg viewBox="0 0 24 24"><rect x="2" y="3" width="7" height="7" rx="1"/><rect x="15" y="3" width="7" height="7" rx="1"/><rect x="2" y="14" width="7" height="7" rx="1"/><rect x="15" y="14" width="7" height="7" rx="1"/></svg>
-          <span>9 AI Tools</span>
+          <span>{NUM_TOOLS} AI Tools</span>
         </div>
         <div class="th-chip">
           <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 12h10M12 7v10"/></svg>
@@ -78,87 +160,18 @@ render_html("""
   </section>
 
   <section class="th-preview" id="tools-preview">
-    <div class="th-preview-label">General chat + specialized tools · phi4-mini default · More models coming soon</div>
+    <div class="th-preview-label">General chat + {NUM_TOOLS} specialized tools · phi4-mini default · More models coming soon</div>
     <div class="th-preview-grid">
 
-      <a class="th-preview-card" href="/General_AI" target="_self">
-        <div class="th-preview-icon" style="background:linear-gradient(135deg,#003973,#7AB1E3);">
-          <svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8M8 13h5"/></svg>
-        </div>
-        <div class="th-preview-name">HAIVE</div>
-        <div class="th-preview-desc">General AI chat with model selection and open-ended help</div>
-      </a>
-
-      <a class="th-preview-card" href="/Tools_Library" target="_self">
-        <div class="th-preview-icon" style="background:linear-gradient(135deg,#002a58,#0056A3);">
-          <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        </div>
-        <div class="th-preview-name">Interview Coach Hive</div>
-        <div class="th-preview-desc">Role-specific mock interviews with AI feedback</div>
-      </a>
-
-      <a class="th-preview-card" href="/Tools_Library" target="_self">
-        <div class="th-preview-icon" style="background:linear-gradient(135deg,#003d1f,#1a7a4a);">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        </div>
-        <div class="th-preview-name">Doc Summarizer Hive</div>
-        <div class="th-preview-desc">Key points and action items from any text</div>
-      </a>
-
-      <a class="th-preview-card" href="/Tools_Library" target="_self">
-        <div class="th-preview-icon" style="background:linear-gradient(135deg,#1a2a52,#2952a3);">
-          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        </div>
-        <div class="th-preview-name">Doc Paraphraser Hive</div>
-        <div class="th-preview-desc">Rewrite text in any tone or style</div>
-      </a>
-
-      <a class="th-preview-card" href="/Tools_Library" target="_self">
-        <div class="th-preview-icon" style="background:linear-gradient(135deg,#003d4a,#007a8a);">
-          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        </div>
-        <div class="th-preview-name">Grade Predictor Hive</div>
-        <div class="th-preview-desc">Academic performance estimate from study habits</div>
-      </a>
-
-      <a class="th-preview-card" href="/Tools_Library" target="_self">
-        <div class="th-preview-icon" style="background:linear-gradient(135deg,#2a1a52,#5a35a8);">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        </div>
-        <div class="th-preview-name">Roleplay Creator Hive</div>
-        <div class="th-preview-desc">Configure AI personas for scenario-based learning</div>
-      </a>
-
-      <a class="th-preview-card" href="/Tools_Library" target="_self">
-        <div class="th-preview-icon" style="background:linear-gradient(135deg,#003355,#1a6e99);">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </div>
-        <div class="th-preview-name">Wellness Companion Hive</div>
-        <div class="th-preview-desc">Judgment-free emotional reflection and journaling</div>
-      </a>
-
-      <a class="th-preview-card" href="/Tools_Library" target="_self">
-        <div class="th-preview-icon" style="background:linear-gradient(135deg,#3d2200,#8a5200);">
-          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div class="th-preview-name">Fact Checker Hive</div>
-        <div class="th-preview-desc">Credibility analysis on news and claims</div>
-      </a>
-
-      <a class="th-preview-card" href="/Tools_Library" target="_self">
-        <div class="th-preview-icon" style="background:linear-gradient(135deg,#002840,#005580);">
-          <svg viewBox="0 0 24 24"><polygon points="3,11 22,2 13,21 11,13 3,11"/></svg>
-        </div>
-        <div class="th-preview-name">Career Roadmap Hive</div>
-        <div class="th-preview-desc">Structured plan with skill gaps and milestones</div>
-      </a>
+      {HAIVE_CARD}
+      {builtin_cards_html}
 
     </div>
 
     <div class="th-stats-row">
-      <div><div class="th-stat-num">9</div><div class="th-stat-label">AI Tools</div></div>
+      <div><div class="th-stat-num">{NUM_TOOLS}</div><div class="th-stat-label">AI Tools</div></div>
       <div><div class="th-stat-num">100%</div><div class="th-stat-label">Local · Private</div></div>
-      <div><div class="th-stat-num">6</div><div class="th-stat-label">Model Options</div></div>
+      <div><div class="th-stat-num">{NUM_MODELS_TOTAL}</div><div class="th-stat-label">Model Options</div></div>
       <div><div class="th-stat-num">∞</div><div class="th-stat-label">Custom Tools</div></div>
     </div>
   </section>

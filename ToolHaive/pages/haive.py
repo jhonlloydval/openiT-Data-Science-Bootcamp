@@ -5,7 +5,7 @@ from utils.ollama_client import MODEL, MODEL_OPTIONS, chat
 from utils.ui import inject_styles, render_html, render_navbar, render_tool_header
 
 st.set_page_config(
-    page_title="HAIVE - ToolHive AI",
+    page_title="HAIVE — ToolHive AI",
     page_icon="🔷",
     layout="wide",
     initial_sidebar_state="collapsed",

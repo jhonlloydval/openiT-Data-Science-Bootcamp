@@ -352,7 +352,7 @@ render_html(f"""
 render_html("""
 <div class="th-featured-strip">
   <div class="th-featured-inner">
-    <a class="th-featured-card" href="/General_AI" target="_self">
+    <a class="th-featured-card" href="/haive" target="_self">
       <div class="th-featured-content">
         <div class="th-featured-label">Featured</div>
         <div class="th-featured-title">HAIVE</div>
