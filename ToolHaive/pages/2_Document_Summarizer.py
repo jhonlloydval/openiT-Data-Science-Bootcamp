@@ -55,7 +55,7 @@ Do not add a separate introduction or conclusion.""",
 One short sentence naming the single most important point.""",
 }
 
-TOOL_PROMPT = TOOL_PROMPT = """You are ToolHive's Document Summarizer Hive, a high-fidelity text compression and extraction system.
+TOOL_PROMPT = """You are ToolHive's Document Summarizer Hive, a high-fidelity text compression and extraction system.
 
 Your primary goal is to accurately reduce and restructure text WITHOUT changing meaning.
 
