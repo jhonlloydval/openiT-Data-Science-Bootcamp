@@ -10,10 +10,10 @@ Assigned to: Iris
 
 import streamlit as st
 from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body_container
-from utils.ollama_client import chat
+from utils.ollama_client import chat, scoped_system_prompt
 
 st.set_page_config(
-    page_title="Interview Coach — ToolHive AI",
+    page_title="Interview Coach Hive — ToolHive AI",
     page_icon="🎙️", layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -21,13 +21,13 @@ st.set_page_config(
 inject_styles()
 render_navbar(active="dashboard")
 render_tool_header(
-    title    = "Interview Coach",
+    title    = "Interview Coach Hive",
     subtitle = "Role-specific mock interviews · AI-powered feedback",
     cover_class = "cv-1",
 )
 
 # ── System prompt ─────────────────────────────────────────────────────────────
-SYSTEM_PROMPT = """You are ToolHive's Interview Coach, a realistic and supportive mock interviewer.
+TOOL_PROMPT = """You are ToolHive's Interview Coach Hive, a realistic and supportive mock interviewer.
 
 Primary goal:
 Help the user practice for a specific role, industry, interview stage, or skill area.
@@ -80,7 +80,14 @@ Tone:
 - Professional, encouraging, practical, and concise.
 - If the user asks for strategy, examples, or a different focus, help briefly and continue the interview flow."""
 
-STARTER_MESSAGE = """Hi, I am your Interview Coach. Tell me what interview you are preparing for, and I will set up a focused mock interview before asking the first question.
+SYSTEM_PROMPT = scoped_system_prompt(
+    tool_name="Interview Coach Hive",
+    tool_scope="Interview preparation, mock interviews, interview answer feedback, role-specific interview strategy, resume-to-interview positioning, and job interview confidence practice.",
+    tool_prompt=TOOL_PROMPT,
+    refusal_message="This request is outside the scope of Interview Coach Hive. I can only assist with interview preparation, mock interviews, and interview answer coaching.",
+)
+
+STARTER_MESSAGE = """Hi, I am your Interview Coach Hive. Tell me what interview you are preparing for, and I will set up a focused mock interview before asking the first question.
 
 You can keep it simple:
 `Junior Data Analyst internship, beginner, SQL + behavioral questions`
@@ -99,33 +106,32 @@ def new_interview_messages() -> list[dict]:
 if "ic_messages" not in st.session_state:
     st.session_state.ic_messages = new_interview_messages()
 
-# ── Render chat history ───────────────────────────────────────────────────────
-with tool_body_container():
-    for msg in st.session_state.ic_messages[1:]:   # skip system
-        with st.chat_message(msg["role"]):
-            st.markdown(msg["content"])
-
-    # ── Reset button ──────────────────────────────────────────────────────────
-    if any(msg["role"] == "user" for msg in st.session_state.ic_messages):
-        if st.button("Start New Interview"):
-            st.session_state.ic_messages = new_interview_messages()
-            st.rerun()
-
-# ── Handle new input ──────────────────────────────────────────────────────────
 has_user_context = any(msg["role"] == "user" for msg in st.session_state.ic_messages)
 input_placeholder = (
     "Tell me your target role, level, and interview type..."
     if not has_user_context
     else "Type your interview answer or ask for coaching..."
 )
-
-if prompt := st.chat_input(input_placeholder):
+prompt = st.chat_input(input_placeholder)
+if prompt:
     st.session_state.ic_messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking…"):
-            reply = chat(st.session_state.ic_messages)
-        st.markdown(reply)
-    st.session_state.ic_messages.append({"role": "assistant", "content": reply})
-    st.rerun()
+
+# ── Render chat history ───────────────────────────────────────────────────────
+with tool_body_container():
+    for msg in st.session_state.ic_messages[1:]:   # skip system
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
+
+    if prompt:
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking…"):
+                reply = chat(st.session_state.ic_messages)
+            st.markdown(reply)
+        st.session_state.ic_messages.append({"role": "assistant", "content": reply})
+        st.rerun()
+
+    # ── Reset button ──────────────────────────────────────────────────────────
+    if any(msg["role"] == "user" for msg in st.session_state.ic_messages):
+        if st.button("Start New Interview"):
+            st.session_state.ic_messages = new_interview_messages()
+            st.rerun()

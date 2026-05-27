@@ -30,7 +30,7 @@ render_navbar(active="dashboard")
 BUILTIN_TOOLS = [
     dict(
         id          = "interview_coach",
-        name        = "Interview Coach",
+        name        = "Interview Coach Hive",
         user        = "For job applicants & professionals",
         desc        = "Simulates mock interviews with role-specific questions, evaluates answers, and provides structured feedback with improved suggestions.",
         cat         = "professional",
@@ -42,7 +42,7 @@ BUILTIN_TOOLS = [
     ),
     dict(
         id          = "doc_summarizer",
-        name        = "Doc Summarizer",
+        name        = "Doc Summarizer Hive",
         user        = "For students & researchers",
         desc        = "Accepts pasted text and returns a structured summary, key points, and action items — designed for fast academic and professional use.",
         cat         = "academic",
@@ -54,7 +54,7 @@ BUILTIN_TOOLS = [
     ),
     dict(
         id          = "doc_paraphraser",
-        name        = "Doc Paraphraser",
+        name        = "Doc Paraphraser Hive",
         user        = "For students & writers",
         desc        = "Rewrites user-submitted text in formal, casual, academic, or simplified tone while fully preserving original meaning.",
         cat         = "academic",
@@ -66,7 +66,7 @@ BUILTIN_TOOLS = [
     ),
     dict(
         id          = "grade_predictor",
-        name        = "Grade Predictor",
+        name        = "Grade Predictor Hive",
         user        = "For students",
         desc        = "Estimates academic performance from study hours, attendance, past grades, and self-assessed engagement with improvement tips.",
         cat         = "academic",
@@ -78,7 +78,7 @@ BUILTIN_TOOLS = [
     ),
     dict(
         id          = "roleplay_creator",
-        name        = "Roleplay Creator",
+        name        = "Roleplay Creator Hive",
         user        = "For educators & trainers",
         desc        = "Configure an AI persona — historical figure, interviewer, or character — and engage in a structured in-character conversation.",
         cat         = "education",
@@ -90,7 +90,7 @@ BUILTIN_TOOLS = [
     ),
     dict(
         id          = "wellness_companion",
-        name        = "Wellness Companion",
+        name        = "Wellness Companion Hive",
         user        = "For general users",
         desc        = "A judgment-free space for emotional reflection and journaling. Not a clinical tool — a supportive companion for everyday wellbeing.",
         cat         = "wellness",
@@ -102,7 +102,7 @@ BUILTIN_TOOLS = [
     ),
     dict(
         id          = "fact_checker",
-        name        = "Fact Checker",
+        name        = "Fact Checker Hive",
         user        = "For general users",
         desc        = "Credibility analysis on news headlines, claims, or article excerpts — with logical consistency checks and verification source suggestions.",
         cat         = "media",
@@ -114,7 +114,7 @@ BUILTIN_TOOLS = [
     ),
     dict(
         id          = "career_roadmap",
-        name        = "Career Roadmap",
+        name        = "Career Roadmap Hive",
         user        = "For professionals",
         desc        = "Structured career transition plan with identified skill gaps, learning milestones, and recommended resources based on your current role and goals.",
         cat         = "professional",
@@ -171,6 +171,56 @@ CATEGORY_OPTIONS = {
     "Custom": "custom",
 }
 
+render_html("""
+<style>
+.th-featured-strip {
+  background: var(--cream-light); padding: 26px 48px 4px;
+}
+.th-featured-inner {
+  max-width: 1300px; margin: 0 auto;
+}
+.th-featured-card {
+  display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center;
+  gap: 24px; padding: 28px 30px; border-radius: 18px;
+  background:
+    linear-gradient(135deg,rgba(10,22,40,0.98),rgba(0,57,115,0.94)),
+    linear-gradient(90deg,#003973,#0056A3,#7AB1E3);
+  border: 1px solid rgba(122,177,227,0.38);
+  box-shadow: 0 24px 60px rgba(0,56,115,0.18);
+  color: white; text-decoration: none !important; overflow: hidden;
+  position: relative;
+}
+.th-featured-label {
+  display: inline-flex; width: fit-content; margin-bottom: 12px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--cream);
+  border: 1px solid rgba(229,229,190,0.24); border-radius: 999px;
+  padding: 5px 10px; background: rgba(229,229,190,0.06);
+}
+.th-featured-title {
+  font-family: var(--font-display); font-size: clamp(28px,4vw,46px);
+  font-weight: 800; letter-spacing: -0.02em; line-height: 1;
+  background: var(--grad); -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; background-clip: text;
+}
+.th-featured-sub {
+  font-size: 15px; color: rgba(229,229,190,0.68);
+  margin-top: 10px; line-height: 1.6; max-width: 720px;
+}
+.th-featured-action {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: white; background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18); border-radius: 10px;
+  padding: 13px 18px; white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .th-featured-strip { padding: 22px 22px 4px; }
+  .th-featured-card { grid-template-columns: 1fr; padding: 24px; }
+  .th-featured-action { width: fit-content; }
+}
+</style>
+""")
+
 # ── Helper: render a single tool card ────────────────────────────────────────
 def card_html(tool: dict) -> str:
     badge_class = "badge-multi" if tool.get("turn") == "multi" else "badge-single"
@@ -226,12 +276,12 @@ add_card_html = """
       <line x1="5"  y1="12" x2="19" y2="12"/>
     </svg>
   </div>
-  <div class="th-card-add-label">Build Your Own Tool</div>
+  <div class="th-card-add-label">Build Your Own Hive</div>
   <div class="th-card-add-sub">
     Define a name, system prompt, and input format —
-    your tool is instantly available in this library.
+    your custom assistant is instantly available in this library.
   </div>
-  <a class="th-card-launch" href="/Custom_Tool_Runner" target="_self">Build Tool</a>
+  <a class="th-card-launch" href="/Custom_Tool_Runner" target="_self">Build Hive</a>
 </div>
 """
 
@@ -248,7 +298,7 @@ render_html(f"""
         <div class="th-dash-eyebrow">Modular GenAI Tools Library</div>
         <div class="th-dash-title">Tools Library</div>
         <div class="th-dash-sub">
-          {len(ALL_TOOLS)} specialized assistants · Launch any tool or build your own
+          HAIVE general chat + {len(ALL_TOOLS)} specialized assistants · Launch any Hive or build your own
         </div>
       </div>
       <a class="th-dash-add-btn" href="/Custom_Tool_Runner" target="_self">
@@ -256,9 +306,27 @@ render_html(f"""
           <line x1="12" y1="5" x2="12" y2="19"/>
           <line x1="5"  y1="12" x2="19" y2="12"/>
         </svg>
-        Add New Toolkit
+        Add New Hive
       </a>
     </div>
+  </div>
+</div>
+""")
+
+render_html("""
+<div class="th-featured-strip">
+  <div class="th-featured-inner">
+    <a class="th-featured-card" href="/General_AI" target="_self">
+      <div class="th-featured-content">
+        <div class="th-featured-label">Featured</div>
+        <div class="th-featured-title">HAIVE</div>
+        <div class="th-featured-sub">
+          General AI Assistant for open-ended chat, drafting, studying, planning, and problem solving.
+          Powered by phi4-mini by default, with a model selector and more models coming soon.
+        </div>
+      </div>
+      <div class="th-featured-action">Launch HAIVE -></div>
+    </a>
   </div>
 </div>
 """)

@@ -9,7 +9,7 @@ from utils.ollama_client import chat
 from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body_container
 
 st.set_page_config(
-    page_title="Custom Tool Builder - ToolHive AI",
+    page_title="Custom Tool Hive - ToolHive AI",
     page_icon="➕",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -18,7 +18,7 @@ st.set_page_config(
 inject_styles()
 render_navbar(active="dashboard")
 render_tool_header(
-    title="Custom Tool Builder",
+    title="Custom Tool Hive",
     subtitle="Create and run your own prompt-powered assistant",
     cover_class="cv-8",
 )

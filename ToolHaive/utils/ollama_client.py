@@ -8,32 +8,96 @@ All AI calls route through here so the model and URL are configured once.
 
 import requests
 import json
+import os
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
-MODEL      = "llama3.2"
+MODEL      = "phi4-mini"
+PROMPT_TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "..", "prompts")
+
+MODEL_OPTIONS = {
+    "phi4-mini": {
+        "label": "phi4-mini",
+        "status": "available",
+        "default": True,
+    },
+    "llama3.2": {
+        "label": "llama3.2",
+        "status": "available",
+        "default": False,
+    },
+    "gemma3:4b": {
+        "label": "gemma3:4b",
+        "status": "TBA",
+        "default": False,
+    },
+    "qwen3.5": {
+        "label": "qwen3.5",
+        "status": "TBA",
+        "default": False,
+    },
+    "claude-3-5-sonnet": {
+        "label": "claude-3-5-sonnet",
+        "status": "TBA",
+        "default": False,
+    },
+    "gemini-2.0-flash": {
+        "label": "gemini-2.0-flash",
+        "status": "TBA",
+        "default": False,
+    },
+}
 
 
-def chat(messages: list[dict], stream: bool = False) -> str:
+def load_prompt_template(filename: str) -> str:
+    """Load a shared prompt template from ToolHive's prompt directory."""
+    path = os.path.join(PROMPT_TEMPLATE_DIR, filename)
+    with open(path) as f:
+        return f.read()
+
+
+def scoped_system_prompt(
+    tool_name: str,
+    tool_scope: str,
+    tool_prompt: str,
+    refusal_message: str | None = None,
+) -> str:
+    """Combine the shared ToolHive boundary with a tool-specific prompt."""
+    refusal = refusal_message or (
+        f"This request is outside the scope of {tool_name}. "
+        "I can only assist with this tool's purpose."
+    )
+    template = load_prompt_template("tool_scope.txt")
+    return template.format(
+        tool_name=tool_name.strip(),
+        tool_scope=tool_scope.strip(),
+        refusal_message=refusal.strip(),
+        tool_prompt=tool_prompt.strip(),
+    )
+
+
+def chat(messages: list[dict], stream: bool = False, model: str | None = None) -> str:
     """Send a message list to Ollama and return the assistant reply as a string.
 
     Args:
         messages: List of {"role": ..., "content": ...} dicts.
-                  Include the system prompt as the first message.
+                  Include a system prompt only when a tool needs one.
         stream:   False (default) returns the full response at once.
                   True not used in this prototype.
+        model:    Optional Ollama model name that overrides the default.
     Returns:
         The model's reply string, or an error message if the call fails.
     """
     try:
-        payload  = {"model": MODEL, "messages": messages, "stream": False}
+        selected_model = model or MODEL
+        payload  = {"model": selected_model, "messages": messages, "stream": False}
         response = requests.post(OLLAMA_URL, json=payload, timeout=120)
         response.raise_for_status()
         return response.json()["message"]["content"]
     except requests.exceptions.ConnectionError:
         return (
             "⚠️ Could not connect to Ollama. "
-            "Make sure Ollama is running (`ollama serve`) and Llama 3.2 is pulled "
-            "(`ollama pull llama3.2`)."
+            "Make sure Ollama is running (`ollama serve`) and phi4-mini is pulled "
+            "(`ollama pull phi4-mini`)."
         )
     except requests.exceptions.Timeout:
         return "⚠️ The model took too long to respond. Please try again."
