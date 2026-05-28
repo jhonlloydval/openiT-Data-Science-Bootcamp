@@ -1,5 +1,5 @@
 """
-pages/4_Grade_Predictor.py - ToolHive AI
+pages/4_Grade_Predictor.py - ToolHaive AI
 
 GradeWise Hive replaces the original grade predictor placeholder.
 This file is self-contained: data structures, calculations, dashboard,
@@ -33,7 +33,7 @@ from utils.ui import (
 
 
 st.set_page_config(
-    page_title="GradeWise Hive - ToolHive AI",
+    page_title="GradeWise Hive - ToolHaive AI",
     page_icon="GW",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -884,7 +884,7 @@ def render_intro() -> None:
             <div class="gw-title">GradeWise</div>
             <div class="gw-copy">
               Manage subjects, enter itemized scores, calculate weighted grades,
-              and forecast what each course needs next. Built into ToolHive's
+              and forecast what each course needs next. Built into ToolHaive's
               local AI workflow with transparent grade math.
             </div>
           </div>

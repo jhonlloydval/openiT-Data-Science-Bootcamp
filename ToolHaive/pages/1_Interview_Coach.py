@@ -1,5 +1,5 @@
 """
-pages/1_Interview_Coach.py — ToolHive AI
+pages/1_Interview_Coach.py — ToolHaive AI
 ──────────────────────────────────────────────────────────────────────────────
 Multi-turn AI interview simulator. Asks one question at a time, evaluates
 the user's answer, and gives structured feedback before asking the next.
@@ -13,7 +13,7 @@ from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body
 from utils.ollama_client import chat, scoped_system_prompt
 
 st.set_page_config(
-    page_title="Interview Coach Hive — ToolHive AI",
+    page_title="Interview Coach Hive — ToolHaive AI",
     page_icon="🎙️", layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -27,7 +27,7 @@ render_tool_header(
 )
 
 # ── System prompt ─────────────────────────────────────────────────────────────
-TOOL_PROMPT = """You are ToolHive's Interview Coach Hive, a realistic and supportive mock interviewer.
+TOOL_PROMPT = """You are ToolHaive's Interview Coach Hive, a realistic and supportive mock interviewer.
 
 Primary goal:
 Help the user practice for a specific role, industry, interview stage, or skill area.

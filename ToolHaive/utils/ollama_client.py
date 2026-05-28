@@ -1,7 +1,7 @@
 """
 utils/ollama_client.py
 ───────────────────────────────────────────────────────────────────────────────
-ToolHive AI — Shared Ollama API Wrapper
+ToolHaive AI — Shared Ollama API Wrapper
 All AI calls route through here so the model and URL are configured once.
 ───────────────────────────────────────────────────────────────────────────────
 """
@@ -49,7 +49,7 @@ MODEL_OPTIONS = {
 
 
 def load_prompt_template(filename: str) -> str:
-    """Load a shared prompt template from ToolHive's prompt directory."""
+    """Load a shared prompt template from ToolHaive's prompt directory."""
     path = os.path.join(PROMPT_TEMPLATE_DIR, filename)
     with open(path) as f:
         return f.read()
@@ -61,7 +61,7 @@ def scoped_system_prompt(
     tool_prompt: str,
     refusal_message: str | None = None,
 ) -> str:
-    """Combine the shared ToolHive boundary with a tool-specific prompt."""
+    """Combine the shared ToolHaive boundary with a tool-specific prompt."""
     refusal = refusal_message or (
         f"This request is outside the scope of {tool_name}. "
         "I can only assist with this tool's purpose."

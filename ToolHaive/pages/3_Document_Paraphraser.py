@@ -1,8 +1,8 @@
 """
-pages/3_Document_Paraphraser.py - ToolHive AI
+pages/3_Document_Paraphraser.py - ToolHaive AI
 
 Integrated from the TBA paraphraser contribution and adapted to the shared
-ToolHive UI/model flow.
+ToolHaive UI/model flow.
 
 Assigned to: Iris
 """
@@ -12,7 +12,7 @@ from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body
 from utils.ollama_client import chat, scoped_system_prompt
 
 st.set_page_config(
-    page_title="Doc Paraphraser Hive — ToolHive AI",
+    page_title="Doc Paraphraser Hive — ToolHaive AI",
     page_icon="✏️", layout="wide",
     initial_sidebar_state="collapsed",
 )

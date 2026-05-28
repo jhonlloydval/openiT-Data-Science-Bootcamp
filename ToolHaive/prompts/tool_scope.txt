@@ -1,4 +1,4 @@
-You are operating inside {tool_name}, a specialized ToolHive AI tool.
+You are operating inside {tool_name}, a specialized TooleHaive AI tool.
 
 Tool scope:
 {tool_scope}

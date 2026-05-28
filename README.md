@@ -1,6 +1,6 @@
 # ToolHaive AI
 
-ToolHaive AI, displayed in the app as ToolHive AI, is a local, privacy-first
+ToolHaive AI, displayed in the app as ToolHaive AI, is a local, privacy-first
 AI workspace built for the openIT Data Science Bootcamp. It combines a polished
 home page, a tools library, a general chat assistant named HAIVE, scoped AI
 tools, a custom tool builder, and academic grade forecasting utilities into one
@@ -41,7 +41,7 @@ boundary.
 
 The app includes:
 
-- A branded landing page for ToolHive AI
+- A branded landing page for ToolHaive AI
 - A searchable tools library
 - A general AI chat assistant called HAIVE
 - 12 built-in specialized Hives
@@ -49,7 +49,7 @@ The app includes:
 - A self-contained GradeWise academic tracker
 - A standalone Forecasting Hive
 - About and Sources pages with project documentation
-- Shared ToolHive design system and navigation
+- Shared ToolHaive design system and navigation
 - Local model calls through Ollama
 
 ## Core Features
@@ -102,7 +102,7 @@ It defines:
 - Tool body containers
 - Output styling
 - Responsive spacing rules
-- ToolHive colors and typography
+- ToolHaive colors and typography
 
 ### Tools Library
 
@@ -249,9 +249,9 @@ openiT-Data-Science-Bootcamp/
 |   |-- data/
 |   |   `-- custom_tools.json
 |   |-- files/
-|   |   |-- ToolHive_Paper.docx
-|   |   |-- ToolHive_Paper.pdf
-|   |   `-- toolhive_brand_guide.html
+|   |   |-- ToolHaive_Paper.docx
+|   |   |-- ToolHaive_Paper.pdf
+|   |   `-- ToolHaive_brand_guide.html
 |   |-- pages/
 |   |   |-- 0_Tools_Library.py
 |   |   |-- 1_Interview_Coach.py
@@ -524,9 +524,9 @@ Current source files:
 
 | File | Purpose |
 |---|---|
-| `ToolHive_Paper.pdf` | Project paper and system design reference |
-| `ToolHive_Paper.docx` | Editable version of the project paper |
-| `toolhive_brand_guide.html` | Brand guide and visual design reference |
+| `ToolHaive_Paper.pdf` | Project paper and system design reference |
+| `ToolHaive_Paper.docx` | Editable version of the project paper |
+| `ToolHaive_brand_guide.html` | Brand guide and visual design reference |
 
 The Sources page explains how these files informed:
 
@@ -585,7 +585,7 @@ Potential next steps:
 - Add streaming responses for all AI tools
 - Add persistent conversation history
 - Add export and import for custom tools
-- Add retrieval over `ToolHive_Paper.pdf`
+- Add retrieval over `ToolHaive_Paper.pdf`
 - Add semantic search for project sources
 - Add a real settings page for model configuration
 - Add cloud model connectors
@@ -665,7 +665,7 @@ workflow again.
 Project:
 
 ```text
-ToolHaive AI / ToolHive AI
+ToolHaive AI / ToolHaive AI
 ```
 
 Built for:

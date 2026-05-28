@@ -1,8 +1,8 @@
 """
-pages/2_Document_Summarizer.py - ToolHive AI
+pages/2_Document_Summarizer.py - ToolHaive AI
 
 Single-turn document summarizer. Integrated from the TBA summarizer contribution
-and adapted to the shared ToolHive UI/model flow.
+and adapted to the shared ToolHaive UI/model flow.
 
 Assigned to: Iris
 """
@@ -12,7 +12,7 @@ from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body
 from utils.ollama_client import chat, scoped_system_prompt
 
 st.set_page_config(
-    page_title="Doc Summarizer Hive — ToolHive AI",
+    page_title="Doc Summarizer Hive — ToolHaive AI",
     page_icon="📄", layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -55,7 +55,7 @@ Do not add a separate introduction or conclusion.""",
 One short sentence naming the single most important point.""",
 }
 
-TOOL_PROMPT = """You are ToolHive's Document Summarizer Hive, a high-fidelity text compression and extraction system.
+TOOL_PROMPT = """You are ToolHaive's Document Summarizer Hive, a high-fidelity text compression and extraction system.
 
 Your primary goal is to accurately reduce and restructure text WITHOUT changing meaning.
 

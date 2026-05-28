@@ -1,5 +1,5 @@
 """
-pages/11_Essay_Generator.py — ToolHive AI
+pages/11_Essay_Generator.py — ToolHaive AI
 
 Essay & Content Generator.
 Given a topic, tone, essay type, and optional reference context,
@@ -19,7 +19,7 @@ from utils.ui import (
 from utils.ollama_client import chat, scoped_system_prompt
 
 st.set_page_config(
-    page_title="Essay Generator Hive — ToolHive AI",
+    page_title="Essay Generator Hive — ToolHaive AI",
     page_icon="📝",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -76,7 +76,7 @@ LENGTHS = {
     "Long (~1000 words)": 1000,
 }
 
-TOOL_PROMPT = """You are ToolHive's Essay & Content Generator Hive — a skilled academic
+TOOL_PROMPT = """You are ToolHaive's Essay & Content Generator Hive — a skilled academic
 and professional writing assistant.
 
 Your job is to produce a well-structured, coherent draft based on the user's

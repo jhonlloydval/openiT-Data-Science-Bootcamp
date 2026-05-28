@@ -1,11 +1,12 @@
-"""pages/7_Fact_Checker.py - ToolHive AI."""
+"""pages/7_Fact_Checker.py - ToolHaive AI."""
 
 import streamlit as st
 from utils.ollama_client import chat, scoped_system_prompt
 from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body_container
+from utils.rag import retrieve, ingest_text, collection_exists
 
 st.set_page_config(
-    page_title="Fact Checker Hive — ToolHive AI",
+    page_title="Fact Checker Hive — ToolHaive AI",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -19,7 +20,10 @@ render_tool_header(
     cover_class="cv-7",
 )
 
-TOOL_PROMPT = TOOL_PROMPT = """You are a strict media literacy and credibility analysis assistant.
+# ── RAG collection name ───────────────────────────────────────────────────────
+RAG_COLLECTION = "fact_checker"
+
+TOOL_PROMPT = """You are a strict media literacy and credibility analysis assistant.
 
 Your role is NOT to verify truth directly or claim access to real-time facts.
 Instead, you evaluate the credibility, structure, and reliability of a claim using observable signals.
@@ -27,6 +31,10 @@ Instead, you evaluate the credibility, structure, and reliability of a claim usi
 You must be careful, skeptical, and uncertainty-aware. Never present speculation as fact.
 
 If information is missing or unverifiable, explicitly state uncertainty.
+
+If reference material is provided under "Retrieved reference context", use it to
+ground your analysis. If it contradicts the claim, say so explicitly. If it supports
+the claim, note that. If it is not relevant, ignore it — do not force a connection.
 
 ---
 
@@ -40,7 +48,7 @@ Classify the claim as one of:
 
 Then provide a 1–2 sentence justification grounded only in reasoning signals (not external verification).
 
-Do NOT state or imply you “checked” facts externally.
+Do NOT state or imply you "checked" facts externally.
 
 ---
 
@@ -98,7 +106,63 @@ SYSTEM_PROMPT = scoped_system_prompt(
     refusal_message="This request is outside the scope of Fact Checker Hive. I can only analyze credibility signals for claims, headlines, and article excerpts.",
 )
 
+
+def build_messages(user_text: str) -> list[dict]:
+    """Build the message list, augmenting the system prompt with RAG context if available."""
+    context = retrieve(RAG_COLLECTION, user_text, top_k=3)
+
+    if context:
+        augmented_system = (
+            SYSTEM_PROMPT
+            + "\n\n---\n\nRetrieved reference context (use to ground your analysis):\n"
+            + context
+        )
+    else:
+        augmented_system = SYSTEM_PROMPT
+
+    return [
+        {"role": "system", "content": augmented_system},
+        {"role": "user",   "content": user_text},
+    ]
+
+
+# ── UI ────────────────────────────────────────────────────────────────────────
 with tool_body_container():
+
+    # ── RAG: reference document ingestion (collapsible) ───────────────────────
+    with st.expander(
+        "Reference documents"
+        + (" ✅ active" if collection_exists(RAG_COLLECTION) else " — none loaded"),
+        expanded=False,
+    ):
+        st.caption(
+            "Paste any reference text (articles, fact sheets, source documents) for the "
+            "AI to use when checking claims. Each paste is added to the knowledge base."
+        )
+        ref_text   = st.text_area(
+            "Reference text",
+            placeholder="Paste a source document, article body, or reference material here…",
+            height=160,
+            key="fc_ref_text",
+        )
+        ref_doc_id = st.text_input(
+            "Document label",
+            placeholder="e.g. who_covid_brief, climate_report_2024",
+            key="fc_ref_doc_id",
+        )
+        col_ingest, col_clear = st.columns([1, 1])
+        if col_ingest.button("Add to knowledge base", key="fc_ingest"):
+            if ref_text.strip() and ref_doc_id.strip():
+                with st.spinner("Embedding and storing…"):
+                    try:
+                        n = ingest_text(RAG_COLLECTION, ref_text.strip(), ref_doc_id.strip())
+                        st.success(f"Ingested {n} chunks from '{ref_doc_id}'.")
+                    except Exception as e:
+                        st.error(f"Ingestion failed: {e}")
+            else:
+                st.warning("Paste some text and enter a document label first.")
+
+    # ── Main claim input ──────────────────────────────────────────────────────
     user_text = st.text_area(
         "Claim, headline, or article excerpt",
         placeholder="Paste a headline, social media claim, or article excerpt here...",
@@ -107,10 +171,7 @@ with tool_body_container():
 
     run = st.button("Analyze Credibility ->")
     if run and user_text.strip():
-        messages = [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_text},
-        ]
+        messages = build_messages(user_text)
         with st.spinner("Reviewing credibility signals..."):
             result = chat(messages)
         st.markdown(result)

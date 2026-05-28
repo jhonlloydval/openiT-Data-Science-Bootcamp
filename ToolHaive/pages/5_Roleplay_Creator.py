@@ -1,5 +1,5 @@
 """
-pages/5_Roleplay_Creator.py — ToolHive AI
+pages/5_Roleplay_Creator.py — ToolHaive AI
 Assigned to: Lloyd
 """
 
@@ -8,7 +8,7 @@ from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body
 from utils.ollama_client import chat, scoped_system_prompt
 
 st.set_page_config(
-    page_title="Roleplay Creator Hive — ToolHive AI",
+    page_title="Roleplay Creator Hive — ToolHaive AI",
     page_icon="🎭", layout="wide",
     initial_sidebar_state="collapsed",
 )

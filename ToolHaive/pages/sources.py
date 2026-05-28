@@ -1,4 +1,4 @@
-"""pages/sources.py - ToolHive AI sources page."""
+"""pages/sources.py - ToolHaive AI sources page."""
 
 from pathlib import Path
 
@@ -8,7 +8,7 @@ from utils.ui import HEX_PATTERN_SM, escape_html, inject_styles, render_html, re
 
 
 st.set_page_config(
-    page_title="Sources - ToolHive AI",
+    page_title="Sources - ToolHaive AI",
     page_icon="TH",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -227,7 +227,7 @@ render_html(
       <div class="src-kicker">Project Evidence And Preparation</div>
       <div class="src-title">Sources</div>
       <div class="src-sub">
-        The documents and references behind ToolHive's product structure,
+        The documents and references behind ToolHaive's product structure,
         visual system, model wrapper, and prompt boundaries.
       </div>
     </div>
@@ -241,19 +241,19 @@ render_html(
           <div class="src-section-title">What informed the build.</div>
         </div>
         <div class="src-section-copy">
-          ToolHive was assembled from a small, deliberate source set: the
+          ToolHaive was assembled from a small, deliberate source set: the
           project paper, the brand guide, model/API documentation, and bootcamp
           lessons on prompt engineering and AI workflow design.
         </div>
       </div>
       <div class="src-grid">
         <div class="src-source">
-          <div class="src-source-title">ToolHive Paper</div>
+          <div class="src-source-title">ToolHaive Paper</div>
           <div class="src-source-copy">Internal design and architecture document used for the tool taxonomy, workflow framing, and scope boundaries.</div>
         </div>
         <div class="src-source">
           <div class="src-source-title">Brand Guide</div>
-          <div class="src-source-copy">Visual identity reference used for colors, typography, cards, navigation, and the dark blue ToolHive theme.</div>
+          <div class="src-source-copy">Visual identity reference used for colors, typography, cards, navigation, and the dark blue ToolHaive theme.</div>
         </div>
         <div class="src-source">
           <div class="src-source-title">Model Docs And Lessons</div>
@@ -311,7 +311,7 @@ render_html(
           <div class="src-section-title">What the sources do and do not cover.</div>
         </div>
         <div class="src-section-copy">
-          The sources explain ToolHive's product and UI design. Individual tool
+          The sources explain ToolHaive's product and UI design. Individual tool
           knowledge comes from the local model and the prompts embedded in each
           page. The app does not browse the web or retrieve from a vector store
           during normal tool use.

@@ -1,4 +1,4 @@
-"""pages/9_Custom_Tool_Runner.py - ToolHive AI."""
+"""pages/9_Custom_Tool_Runner.py - ToolHaive AI."""
 
 import json
 import os
@@ -9,7 +9,7 @@ from utils.ollama_client import chat
 from utils.ui import inject_styles, render_navbar, render_tool_header, tool_body_container
 
 st.set_page_config(
-    page_title="Custom Tool Hive — ToolHive AI",
+    page_title="Custom Tool Hive — ToolHaive AI",
     page_icon="➕",
     layout="wide",
     initial_sidebar_state="collapsed",

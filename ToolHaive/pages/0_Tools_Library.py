@@ -1,5 +1,5 @@
 """
-pages/0_Tools_Library.py — ToolHive AI · Dashboard
+pages/0_Tools_Library.py — ToolHaive AI · Dashboard
 ──────────────────────────────────────────────────────────────────────────────
 Renders the cream-background dashboard: hero band, sticky toolbar with
 live search + category filters, and the 4-column tool card grid.
@@ -18,7 +18,7 @@ from utils.tools_data import BUILTIN_TOOLS
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title   = "Tools Library — ToolHive AI",
+    page_title   = "Tools Library — ToolHaive AI",
     page_icon    = "🔷",
     layout       = "wide",
     initial_sidebar_state = "collapsed",

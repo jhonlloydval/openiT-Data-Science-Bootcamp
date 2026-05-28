@@ -1,5 +1,5 @@
 """
-pages/13_Forecasting.py - ToolHive AI
+pages/13_Forecasting.py - ToolHaive AI
 
 Standalone Forecasting Hive. It can use GradeWise session data when present,
 or run a manual academic forecast from entered grade progress.
@@ -25,7 +25,7 @@ from utils.ui import (
 
 
 st.set_page_config(
-    page_title="Forecasting Hive - ToolHive AI",
+    page_title="Forecasting Hive - ToolHaive AI",
     page_icon="FC",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -457,7 +457,7 @@ def render_intro(data_count: int) -> None:
             </div>
             <div class="fc-side-row">
               <span class="fc-side-label">Model flow</span>
-              <span class="fc-side-value">ToolHive local chat</span>
+              <span class="fc-side-value">ToolHaive local chat</span>
             </div>
           </div>
         </div>

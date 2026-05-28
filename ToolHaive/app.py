@@ -1,4 +1,4 @@
-"""app.py — ToolHive AI · Landing / Onboarding Page."""
+"""app.py — ToolHaive AI · Landing / Onboarding Page."""
 
 import streamlit as st
 from utils.ui import inject_styles, render_html, render_navbar
@@ -13,7 +13,7 @@ NUM_MODELS_TOTAL = len(MODEL_OPTIONS)
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="ToolHive AI",
+    page_title="ToolHaive AI",
     page_icon="🔷",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -87,7 +87,7 @@ render_html(f"""
         <div class="th-hero-hex">
           <svg viewBox="0 0 24 24"><path d="M12 2L20 7V17L12 22L4 17V7L12 2Z"/></svg>
         </div>
-        <div class="th-hero-wordmark">ToolHive AI</div>
+        <div class="th-hero-wordmark">ToolHaive AI</div>
       </div>
 
       <p class="th-hero-tagline">

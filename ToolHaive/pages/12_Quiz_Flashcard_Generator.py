@@ -1,5 +1,5 @@
 """
-pages/12_Quiz_Flashcard_Generator.py — ToolHive AI
+pages/12_Quiz_Flashcard_Generator.py — ToolHaive AI
 
 Quiz & Flashcard Generator.
 Paste notes or a document excerpt and get quiz questions or flashcards
@@ -19,7 +19,7 @@ from utils.ui import (
 from utils.ollama_client import chat, scoped_system_prompt
 
 st.set_page_config(
-    page_title="Quiz & Flashcard Generator Hive — ToolHive AI",
+    page_title="Quiz & Flashcard Generator Hive — ToolHaive AI",
     page_icon="🃏",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -79,7 +79,7 @@ DIFFICULTY_LEVELS = {
 
 QUANTITY_OPTIONS = ["5", "8", "10", "15", "20"]
 
-TOOL_PROMPT = """You are ToolHive's Quiz & Flashcard Generator Hive — a precise
+TOOL_PROMPT = """You are ToolHaive's Quiz & Flashcard Generator Hive — a precise
 educational content creator for students and educators.
 
 Your job is to convert user-provided notes or text into high-quality quiz

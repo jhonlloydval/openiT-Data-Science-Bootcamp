@@ -1,5 +1,5 @@
 """
-pages/10_Grammar_Checker.py — ToolHive AI
+pages/10_Grammar_Checker.py — ToolHaive AI
 
 Grammar & Writing Quality Checker.
 Paste any text to get grammar corrections, style suggestions, and a
@@ -19,7 +19,7 @@ from utils.ui import (
 from utils.ollama_client import chat, scoped_system_prompt
 
 st.set_page_config(
-    page_title="Grammar Checker Hive — ToolHive AI",
+    page_title="Grammar Checker Hive — ToolHaive AI",
     page_icon="✅",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -54,7 +54,7 @@ CHECK_MODES = {
     ),
 }
 
-TOOL_PROMPT = """You are ToolHive's Grammar & Writing Checker Hive — a precise,
+TOOL_PROMPT = """You are ToolHaive's Grammar & Writing Checker Hive — a precise,
 constructive writing quality analyst.
 
 Your job is to help the user improve their writing WITHOUT changing their voice,
